@@ -1,0 +1,31 @@
+{
+  "name": "seeder-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "holepunch": {
+    "gui": {
+      "height": 600,
+      "width": 800,
+      "resizable": false
+    },
+    "entrypoints": []
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "brittle": "^3.3.0",
+    "standard": "^17.1.0"
+  },
+  "dependencies": {
+    "corestore": "^6.8.2",
+    "hyperbee": "^2.12.1",
+    "hypercore": "^10.13.0",
+    "random-access-memory": "^6.2.0",
+    "ready-resource": "^1.0.0"
+  }
+}

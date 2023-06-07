@@ -1,0 +1,110 @@
+:root {
+    --main-fg-color: #f9f9f9;
+    --main-bg-color: #05070a;
+    --secondary-fg-color: #bbb;
+    --tertiary-fg-color: #e5ebfb;
+}
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+#placeholder {
+    background-color: var(--main-fg-color);
+    text-align: center;
+    margin-top: 40vh;
+}
+
+.tab {
+    overflow: hidden;
+    background-color: var(--main-fg-color);
+}
+
+.tab button {
+    background-color: inherit;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    transition: 0.3s;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.tab button:hover {
+    background-color: var(--main-fg-color);
+}
+
+.tab button.active {
+    background-color: var(--tertiary-fg-color);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px var(--tertiary-fg-color);
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid var(--tertiary-fg-color);
+}
+
+th {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: bold;
+}
+
+tr:hover {
+    background-color: var(--tertiary-fg-color);
+}
+
+/* CSS for the page */
+body {
+    background-color: var(--main-fg-color);
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+#search {
+    border-radius: 10px;
+    margin-right: 4vw;
+    display: flex;
+    margin-top: 3vh;
+    width: 100%;
+}
+
+
+#search-input {
+    padding: 12px;
+    font-size: 100%;
+    border-radius: 5px;
+    border:none;
+    margin-top: 10%;
+    width: 80%;
+    border: 1px solid var(--tertiary-fg-color);
+    box-shadow: 2px 2px var(--tertiary-fg-color);
+}
+
+#button-input {
+    padding: 12px;
+    font-size: 100%;
+    border-radius: 5px;
+    border:none;
+    margin-top: 10%;
+    margin-bottom: 0px;
+    margin-right: 12px;
+    border: 1px solid var(--tertiary-fg-color);
+    box-shadow: 2px 2px var(--tertiary-fg-color);
+}
