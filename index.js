@@ -6,15 +6,17 @@ const renderSeeder = async (seeder) => {
   const table = document.getElementById('seeder-table')
   table.innerHTML = ''
   for await (const entry of seeder.list()) {
+    const row = document.createElement('tr')
     const key = document.createElement('td')
     const type = document.createElement('td')
     const description = document.createElement('td')
     key.innerHTML = entry.key.toString('hex')
     type.innerHTML = entry.value.type
     description.innerHTML = entry.value.description
-    table.append(key)
-    table.append(type)
-    table.append(description)
+    row.append(key)
+    row.append(type)
+    row.append(description)
+    table.append(row)
   }
 }
 
