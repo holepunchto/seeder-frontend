@@ -5,7 +5,7 @@
   "main": "index.html",
   "holepunch": {
     "gui": {
-      "height": 600,
+      "height": 500,
       "width": 800,
       "resizable": false
     },

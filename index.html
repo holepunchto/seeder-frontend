@@ -7,53 +7,63 @@
     <title>Seeder</title>
   </head>
   <body>
-  <h1>Sample Table</h1>
   <div class="tab">
-    <button class="active">Tab 1</button>
-    <button>Tab 2</button>
-    <button>Tab 3</button>
+    <button class="active">List</button>
+    <button>Add</button>
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>Key</th>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody id="seeder-table">
-      <tr>
-        <td>Lorem ipsum dolor</td>
-        <td>Sit amet</td>
-        <td>Consectetur adipiscing elit</td>
-      </tr>
-      <tr>
-        <td>Lorem ipsum dolor</td>
-        <td>Sit amet</td>
-        <td>Consectetur adipiscing elit</td>
-      </tr>
-      <tr>
-        <td>Lorem ipsum dolor</td>
-        <td>Sit amet</td>
-        <td>Consectetur adipiscing elit</td>
-      </tr>
-      <tr>
-        <td>Lorem ipsum dolor</td>
-        <td>Sit amet</td>
-        <td>Consectetur adipiscing elit</td>
-      </tr>
-    </tbody>
-  </table>
-  <div id="search">
-    <p id="add-seeder-button">Add seeder</p>
-    <input id="search-input" type="text" spellcheck="false" placeholder="Search stream...">
-  </div>
-
-  <!--
+  <div id="list" class="disabled">
+    <!--
     <div id="placeholder">
       <h2> Drop a seeder file to start seeding </h2>
     </div>
--->
+    -->
+    <table>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="seeder-table">
+        <tr>
+          <td>Lorem ipsum dolor</td>
+          <td>Sit amet</td>
+          <td>Consectetur adipiscing elit</td>
+        </tr>
+        <tr>
+          <td>Lorem ipsum dolor</td>
+          <td>Sit amet</td>
+          <td>Consectetur adipiscing elit</td>
+        </tr>
+        <tr>
+          <td>Lorem ipsum dolor</td>
+          <td>Sit amet</td>
+          <td>Consectetur adipiscing elit</td>
+        </tr>
+        <tr>
+          <td>Lorem ipsum dolor</td>
+          <td>Sit amet</td>
+          <td>Consectetur adipiscing elit</td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="search">
+      <p id="add-seeder-button">Add seeder</p>
+      <input id="add-seeder-input" type="text" spellcheck="false" placeholder="Search stream...">
+    </div>
+  </div>
+  <div id="add-form" class="">
+    <input id="public-key" type="text" spellcheck="false" placeholder="Public key">
+    <input id="description" type="text" spellcheck="false" placeholder="Description">
+    <select id="select-type" id="type">
+      <option value="core">core</option>
+      <option value="bee">bee</option>
+      <option value="drive">drive</option>
+      <option value="seeder">seeder</option>
+    </select>
+    <p id="add-button">Add</p>
+  </div>
   </body>
   <script type="module" src="index.js"></script>
 </html>

@@ -30,4 +30,10 @@ window.onload = async () => {
     seeders.set(input, seeder)
     await renderSeeder(seeder)
   }
+
+  /*
+  const seeder = new Seeder('/home/rpaezbas/hyper/seeder-frontend/test/core')
+  await seeder.ready()
+  await renderSeeder(seeder)
+  */
 }
