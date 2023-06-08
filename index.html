@@ -8,10 +8,10 @@
   </head>
   <body>
   <div class="tab">
-    <button class="active">List</button>
-    <button>Add</button>
+    <button id="tab-list" class="active">List</button>
+    <button id="tab-add">Add</button>
   </div>
-  <div id="list" class="disabled">
+  <div id="list" class="">
     <!--
     <div id="placeholder">
       <h2> Drop a seeder file to start seeding </h2>
@@ -53,7 +53,7 @@
       <input id="add-seeder-input" type="text" spellcheck="false" placeholder="Search stream...">
     </div>
   </div>
-  <div id="add-form" class="">
+  <div id="add-form" class="disabled">
     <input id="public-key" type="text" spellcheck="false" placeholder="Public key">
     <input id="description" type="text" spellcheck="false" placeholder="Description">
     <select id="select-type" id="type">

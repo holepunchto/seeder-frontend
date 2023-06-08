@@ -31,6 +31,20 @@ window.onload = async () => {
     await renderSeeder(seeder)
   }
 
+  document.getElementById('tab-list').onclick = async () => {
+    document.getElementById('list').classList.remove('disabled')
+    document.getElementById('add-form').classList.add('disabled')
+    document.getElementById('tab-list').classList.add('active')
+    document.getElementById('tab-add').classList.remove('active')
+  }
+
+  document.getElementById('tab-add').onclick = async () => {
+    document.getElementById('list').classList.add('disabled')
+    document.getElementById('add-form').classList.remove('disabled')
+    document.getElementById('tab-list').classList.remove('active')
+    document.getElementById('tab-add').classList.add('active')
+  }
+
   /*
   const seeder = new Seeder('/home/rpaezbas/hyper/seeder-frontend/test/core')
   await seeder.ready()

@@ -86,10 +86,6 @@ h1 {
     width: 100%;
 }
 
-#add-form {
-    margin-top: 6%;
-}
-
 #public-key, #description {
     display: block;
     padding: 12px;
@@ -158,4 +154,8 @@ h1 {
 
 .disabled {
     display: none;
+}
+
+#add-form {
+    padding: 0px;
 }
