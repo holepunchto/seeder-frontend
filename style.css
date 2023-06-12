@@ -5,6 +5,11 @@
     --tertiary-fg-color: #e5ebfb;
 }
 
+* {
+    font-family: 'Maven Pro', sans-serif;
+    z-index: 0;
+}
+
 body {
     background-color: var(--main-bg-color);
 }
@@ -12,7 +17,12 @@ body {
 #placeholder {
     background-color: var(--main-fg-color);
     text-align: center;
-    margin-top: 40vh;
+    margin-top: 30vh;
+    color: var(--secondary-fg-color);
+    margin-top: 0px;
+    padding: 20vh;
+    border: 1px solid var(--tertiary-fg-color);
+    box-shadow: 2px 2px var(--tertiary-fg-color);
 }
 
 .tab {
@@ -29,8 +39,9 @@ body {
     padding: 12px 20px;
     transition: 0.3s;
     font-size: 16px;
-    font-weight: bold;
     margin-right: 10px;
+    font-weight: bold;
+    color: var(--secondary-fg-color);
 }
 
 .tab button:hover {
@@ -39,6 +50,7 @@ body {
 
 .tab button.active {
     background-color: var(--tertiary-fg-color);
+    color: var(--main-bg-color);
 }
 
 table {
@@ -57,7 +69,6 @@ th, td {
 
 th {
     background-color: #f5f5f5;
-    color: #333;
     font-weight: bold;
 }
 
@@ -158,4 +169,18 @@ h1 {
 
 #add-form {
     padding: 0px;
+}
+
+#seeders {
+    display: inline;
+    float: right;
+}
+
+#view-public-key {
+    border: 1px solid var(--tertiary-fg-color);
+    text-align: center;
+    color: var(--secondary-fg-color);
+    box-shadow: 2px 2px var(--tertiary-fg-color);
+    border-radius: 10px;
+    background-color: #f5f5f5;
 }

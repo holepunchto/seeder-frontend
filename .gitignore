@@ -132,3 +132,8 @@ dist
 .pnp.*
 
 test/
+test/core
+bitfield
+data
+oplog
+tree
