@@ -187,5 +187,9 @@ window.onload = async () => {
   document.getElementById('add-bee-button').onclick = async () => {
     const name = document.getElementById('bee-name').value
     if (name.length) await addBee(name)
+    const core = store.get({ name })
+    await core.ready()
+    swarm.join(core.discoveryKey)
+    swarm.flush()
   }
 }
