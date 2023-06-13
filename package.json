@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
+  "scripts": {
+    "fix": "standard --fix",
+    "stage": "pear stage pear-seeder",
+    "release": "pear release pear-seeder",
+    "seed": "pear seed pear-seeder"
+  },
   "holepunch": {
     "gui": {
       "height": 800,
