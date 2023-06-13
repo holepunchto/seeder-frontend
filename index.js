@@ -134,6 +134,17 @@ const onBeeNameInput = (event) => {
   }
 }
 
+const onAddEntryInput = (event) => {
+  if (document.getElementById('public-key').value.length !== 0 &&
+      document.getElementById('description').value.length !== 0) {
+    document.getElementById('add-button').classList.remove('disabled-button')
+    document.getElementById('add-button').classList.add('enabled-button')
+  } else {
+    document.getElementById('add-button').classList.add('disabled-button')
+    document.getElementById('add-button').classList.remove('enabled-button')
+  }
+}
+
 const addBee = async (name, file) => {
   const core = store.get({ name: '__top__' })
   const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
@@ -171,6 +182,8 @@ window.onload = async () => {
   document.getElementById('tab-add').onclick = showAdd
   document.getElementById('add-bee-toogle').onclick = showAddBee
   document.getElementById('bee-name').onkeyup = onBeeNameInput
+  document.getElementById('public-key').onkeyup = onAddEntryInput
+  document.getElementById('description').onkeyup = onAddEntryInput
   document.getElementById('add-bee-button').onclick = async () => {
     const name = document.getElementById('bee-name').value
     if (name.length) await addBee(name)
