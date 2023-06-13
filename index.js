@@ -78,14 +78,13 @@ const renderBee = async (name) => {
     tableBody.append(createTableRow(entry))
   }
 
-  document.getElementById('view-public-key-value').innerHTML = 'Discovery key: ' + core.discoveryKey.toString('hex')
+  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + core.key.toString('hex')
 
   document.getElementById('add-button').onclick = async () => {
     const { key, type, description } = getNewEntry()
     await bee.put(key, { type, description })
-    const row = createTableRow({ key, value: { type, description } })
-    document.getElementById('view-table').append(row)
     showView()
+    await renderBee(name)
   }
 
   if (!hasEntries) {
