@@ -1,7 +1,9 @@
 import holepunch from 'holepunch://app'
 import Hyperbee from 'hyperbee'
 import Corestore from 'corestore'
+import Hyperswarm from 'hyperswarm'
 
+const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
 
 const createTableRow = (entry) => {
@@ -21,25 +23,32 @@ const createTableRow = (entry) => {
   return row
 }
 
-const hidePlaceholder = () => {
-  document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('view-table').classList.remove('disabled')
-}
-
 const showView = () => {
   document.getElementById('view-table').classList.remove('disabled')
+  document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('add-form').classList.add('disabled')
+  document.getElementById('placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.add('active')
   document.getElementById('tab-add').classList.remove('active')
   document.getElementById('view-public-key').classList.remove('disabled')
 }
 
 const showAdd = () => {
-  document.getElementById('view-table').classList.add('disabled')
   document.getElementById('add-form').classList.remove('disabled')
+  document.getElementById('view-table').classList.add('disabled')
+  document.getElementById('add-bee').classList.add('disabled')
+  document.getElementById('placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.remove('active')
   document.getElementById('tab-add').classList.add('active')
   document.getElementById('view-public-key').classList.add('disabled')
+}
+
+const showAddBee = () => {
+  document.getElementById('add-bee').classList.remove('disabled')
+  document.getElementById('view-table').classList.add('disabled')
+  document.getElementById('add-form').classList.add('disabled')
+  document.getElementById('view-public-key').classList.add('disabled')
+  document.getElementById('placeholder').classList.add('disabled')
 }
 
 const getNewEntry = () => {
@@ -64,7 +73,7 @@ const renderBee = async (name) => {
     tableBody.append(createTableRow(entry))
   }
 
-  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + core.key.toString('hex')
+  document.getElementById('view-public-key-value').innerHTML = 'Discovery key: ' + core.discoveryKey.toString('hex')
 
   document.getElementById('add-button').onclick = async () => {
     const { key, type, description } = getNewEntry()
@@ -78,16 +87,22 @@ const renderBee = async (name) => {
 const setActiveBee = (bee) => {
   Array.from(document.getElementById('seeders').children).forEach(e => e.classList.remove('active'))
   bee.classList.add('active')
-  hidePlaceholder()
+  showView()
 }
 
 // Render list of bees as buttons
 
 const renderBees = async (bees) => {
+  const beeButtons = document.getElementsByClassName('bee-button')
+  while (beeButtons.length > 0) {
+    beeButtons[beeButtons.length - 1].remove()
+  }
+
   for await (const entry of bees.createReadStream()) {
     const beeButton = document.createElement('button')
     beeButton.setAttribute('name', entry.key)
     beeButton.innerHTML = entry.key
+    beeButton.classList.add('bee-button')
     document.getElementById('seeders').prepend(beeButton)
     beeButton.onclick = async () => {
       setActiveBee(beeButton)
@@ -97,10 +112,29 @@ const renderBees = async (bees) => {
   }
 }
 
-window.onload = async () => {
-  document.getElementById('tab-view').onclick = showView
-  document.getElementById('tab-add').onclick = showAdd
+const onBeeNameInput = (event) => {
+  if (event.target.value) {
+    document.getElementById('add-bee-button').classList.remove('disabled-button')
+    document.getElementById('add-bee-button').classList.add('enabled-button')
+  } else {
+    document.getElementById('add-bee-button').classList.add('disabled-button')
+    document.getElementById('add-bee-button').classList.remove('enabled-button')
+  }
+}
 
+const addBee = async (name, file) => {
+  const core = store.get({ name: '__top__' })
+  const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
+  await core.ready()
+  await bees.ready()
+  await bees.put(name)
+
+  // add file if (file) {}
+
+  await renderBees(bees)
+}
+
+window.onload = async () => {
   await store.ready()
   const core = store.get({ name: '__top__' })
   const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
@@ -108,4 +142,25 @@ window.onload = async () => {
   await bees.ready()
 
   await renderBees(bees)
+
+  swarm.on('connection', (conn) => {
+    store.replicate(conn)
+  })
+
+  for await (const entry of bees.createReadStream()) {
+    const core = store.get({ name: entry.key })
+    await core.ready()
+    swarm.join(core.discoveryKey)
+    swarm.join(core.key)
+  }
+  swarm.flush()
+
+  document.getElementById('tab-view').onclick = showView
+  document.getElementById('tab-add').onclick = showAdd
+  document.getElementById('add-bee-toogle').onclick = showAddBee
+  document.getElementById('bee-name').onkeyup = onBeeNameInput
+  document.getElementById('add-bee-button').onclick = async () => {
+    const name = document.getElementById('bee-name').value
+    if (name.length) await addBee(name)
+  }
 }

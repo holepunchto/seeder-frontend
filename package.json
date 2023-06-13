@@ -6,7 +6,7 @@
   "holepunch": {
     "gui": {
       "height": 800,
-      "width": 750,
+      "width": 1200,
       "resizable": false
     },
     "entrypoints": []
@@ -25,6 +25,7 @@
     "corestore": "^6.8.2",
     "hyperbee": "^2.12.1",
     "hypercore": "^10.13.0",
+    "hyperswarm": "^4.5.0",
     "random-access-memory": "^6.2.0",
     "ready-resource": "^1.0.0"
   }

@@ -12,7 +12,7 @@
       <button id="tab-view">View</button>
       <button id="tab-add">Add</button>
       <div id="seeders">
-        <button class="active">+</button>
+        <button id="add-bee-toogle" class="active">+</button>
       </div>
     </div>
     <div id="placeholder">
@@ -42,7 +42,14 @@
         <option value="drive">drive</option>
         <option value="seeder">seeder</option>
       </select>
-      <p id="add-button">Add</p>
+      <p id="add-button" class="disabled-button">Add Entry</p>
+    </div>
+    <div id="add-bee" class="disabled">
+      <input id="bee-name" type="text" spellcheck="false" placeholder="Name">
+      <div id="drag-and-drop">
+        <p> Drag a seeder file here </p>
+      </div>
+      <p id="add-bee-button" class="disabled-button">Add Seeder</p>
     </div>
   </body>
   <script type="module" src="index.js"></script>
