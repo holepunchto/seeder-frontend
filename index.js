@@ -28,6 +28,7 @@ const showView = () => {
   document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('add-form').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
+  document.getElementById('bee-placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.add('active')
   document.getElementById('tab-add').classList.remove('active')
   document.getElementById('view-public-key').classList.remove('disabled')
@@ -38,6 +39,7 @@ const showAdd = () => {
   document.getElementById('view-table').classList.add('disabled')
   document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
+  document.getElementById('bee-placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.remove('active')
   document.getElementById('tab-add').classList.add('active')
   document.getElementById('view-public-key').classList.add('disabled')
@@ -49,6 +51,7 @@ const showAddBee = () => {
   document.getElementById('add-form').classList.add('disabled')
   document.getElementById('view-public-key').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
+  document.getElementById('bee-placeholder').classList.add('disabled')
 }
 
 const getNewEntry = () => {
@@ -66,10 +69,12 @@ const renderBee = async (name) => {
   await core.ready()
   await bee.ready()
 
+  let hasEntries = false
   const tableBody = document.getElementById('view-table-body')
   tableBody.innerHTML = ''
 
   for await (const entry of bee.createReadStream()) {
+    hasEntries = true
     tableBody.append(createTableRow(entry))
   }
 
@@ -81,6 +86,14 @@ const renderBee = async (name) => {
     const row = createTableRow({ key, value: { type, description } })
     document.getElementById('view-table').append(row)
     showView()
+  }
+
+  if (!hasEntries) {
+    document.getElementById('bee-placeholder').classList.remove('disabled')
+    document.getElementById('view-table').classList.add('disabled')
+  } else {
+    document.getElementById('bee-placeholder').classList.add('disabled')
+    document.getElementById('view-table').classList.remove('disabled')
   }
 }
 
@@ -106,8 +119,8 @@ const renderBees = async (bees) => {
     document.getElementById('seeders').prepend(beeButton)
     beeButton.onclick = async () => {
       setActiveBee(beeButton)
-      await renderBee(entry.key)
       showView()
+      await renderBee(entry.key)
     }
   }
 }
