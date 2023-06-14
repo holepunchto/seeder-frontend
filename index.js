@@ -24,13 +24,12 @@ const createTableRow = (entry) => {
 }
 
 const showView = () => {
-  document.getElementById('view-table').classList.remove('disabled')
   document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('add-form').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('bee-placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.add('active')
   document.getElementById('tab-add').classList.remove('active')
+  document.getElementById('view-table').classList.remove('disabled')
   document.getElementById('view-public-key').classList.remove('disabled')
 }
 
@@ -39,7 +38,6 @@ const showAdd = () => {
   document.getElementById('view-table').classList.add('disabled')
   document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('bee-placeholder').classList.add('disabled')
   document.getElementById('tab-view').classList.remove('active')
   document.getElementById('tab-add').classList.add('active')
   document.getElementById('view-public-key').classList.add('disabled')
@@ -51,7 +49,6 @@ const showAddBee = () => {
   document.getElementById('add-form').classList.add('disabled')
   document.getElementById('view-public-key').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('bee-placeholder').classList.add('disabled')
 }
 
 const getNewEntry = () => {
@@ -78,8 +75,6 @@ const renderBee = async (name) => {
     tableBody.append(createTableRow(entry))
   }
 
-  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + core.key.toString('hex')
-
   document.getElementById('add-button').onclick = async () => {
     const { key, type, description } = getNewEntry()
     await bee.put(key, { type, description })
@@ -89,11 +84,14 @@ const renderBee = async (name) => {
 
   if (!hasEntries) {
     document.getElementById('bee-placeholder').classList.remove('disabled')
-    document.getElementById('view-table').classList.add('disabled')
+    document.getElementById('bee-entries').classList.add('disabled')
   } else {
     document.getElementById('bee-placeholder').classList.add('disabled')
-    document.getElementById('view-table').classList.remove('disabled')
+    document.getElementById('bee-entries').classList.remove('disabled')
   }
+  document.getElementById('placeholder').classList.add('disabled')
+  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + core.key.toString('hex')
+  document.getElementById('view-public-key').classList.remove('disabled')
 }
 
 const setActiveBee = (name) => {
@@ -116,9 +114,9 @@ const renderBees = async (bees) => {
     beeButton.classList.add('bee-button')
     document.getElementById('seeders').prepend(beeButton)
     beeButton.onclick = async () => {
+      await renderBee(entry.key)
       setActiveBee(entry.key)
       showView()
-      await renderBee(entry.key)
     }
   }
 }
@@ -158,6 +156,11 @@ const addBee = async (name, file) => {
   setActiveBee(name)
 }
 
+const activateTabs = () => {
+  document.getElementById('tab-view').onclick = showView
+  document.getElementById('tab-add').onclick = showAdd
+}
+
 window.onload = async () => {
   await store.ready()
   const core = store.get({ name: '__top__' })
@@ -165,31 +168,30 @@ window.onload = async () => {
   await core.ready()
   await bees.ready()
 
-  await renderBees(bees)
-
   swarm.on('connection', (conn) => {
     store.replicate(conn)
   })
 
-  let lastBee = null
+  await renderBees(bees)
 
+  let lastBee = null
   for await (const entry of bees.createReadStream()) {
     const name = entry.key
-    lastBee = name
     const core = store.get({ name })
     await core.ready()
     swarm.join(core.discoveryKey)
     swarm.join(core.key)
+    lastBee = name
   }
   swarm.flush()
 
   if (lastBee) {
     await renderBee(lastBee)
     setActiveBee(lastBee)
+    activateTabs()
+    showView()
   }
 
-  document.getElementById('tab-view').onclick = showView
-  document.getElementById('tab-add').onclick = showAdd
   document.getElementById('add-bee-toogle').onclick = showAddBee
   document.getElementById('bee-name').onkeyup = onBeeNameInput
   document.getElementById('public-key').onkeyup = onAddEntryInput
@@ -201,5 +203,6 @@ window.onload = async () => {
     await core.ready()
     swarm.join(core.discoveryKey)
     swarm.flush()
+    activateTabs()
   }
 }

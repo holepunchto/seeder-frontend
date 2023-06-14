@@ -18,20 +18,22 @@
     <div id="placeholder">
       <h3> Select a seeder or create new one using the + button </h3>
     </div>
-    <div id="bee-placeholder" class="disabled">
-      <h3> This seeder does not have any entry yet. Use the "Add" tab to add a new entry </h3>
+    <div id="view-table">
+      <div id="bee-placeholder" class="disabled">
+        <h3> This seeder does not have any entry yet. Use the "Add" tab to add a new entry </h3>
+      </div>
+      <table id="bee-entries" class="disabled">
+        <thead>
+          <tr>
+            <th>Key</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody id="view-table-body">
+        </tbody>
+      </table>
     </div>
-    <table id="view-table" class="disabled">
-      <thead>
-        <tr>
-          <th>Key</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody id="view-table-body">
-      </tbody>
-    </table>
     <div id="view-public-key" class="disabled">
       <p id="view-public-key-value"></p>
       <p>Click to copy to clipboard</p>
