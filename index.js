@@ -83,8 +83,8 @@ const renderBee = async (name) => {
   document.getElementById('add-button').onclick = async () => {
     const { key, type, description } = getNewEntry()
     await bee.put(key, { type, description })
-    showView()
     await renderBee(name)
+    showView()
   }
 
   if (!hasEntries) {
@@ -96,10 +96,9 @@ const renderBee = async (name) => {
   }
 }
 
-const setActiveBee = (bee) => {
+const setActiveBee = (name) => {
   Array.from(document.getElementById('seeders').children).forEach(e => e.classList.remove('active'))
-  bee.classList.add('active')
-  showView()
+  Array.from(document.getElementById('seeders').children).find(e => e.getAttribute('name') === name).classList.add('active')
 }
 
 // Render list of bees as buttons
@@ -117,7 +116,7 @@ const renderBees = async (bees) => {
     beeButton.classList.add('bee-button')
     document.getElementById('seeders').prepend(beeButton)
     beeButton.onclick = async () => {
-      setActiveBee(beeButton)
+      setActiveBee(entry.key)
       showView()
       await renderBee(entry.key)
     }
@@ -155,6 +154,8 @@ const addBee = async (name, file) => {
   // add file if (file) {}
 
   await renderBees(bees)
+  await renderBee(name)
+  setActiveBee(name)
 }
 
 window.onload = async () => {
@@ -170,13 +171,22 @@ window.onload = async () => {
     store.replicate(conn)
   })
 
+  let lastBee = null
+
   for await (const entry of bees.createReadStream()) {
-    const core = store.get({ name: entry.key })
+    const name = entry.key
+    lastBee = name
+    const core = store.get({ name })
     await core.ready()
     swarm.join(core.discoveryKey)
     swarm.join(core.key)
   }
   swarm.flush()
+
+  if (lastBee) {
+    await renderBee(lastBee)
+    setActiveBee(lastBee)
+  }
 
   document.getElementById('tab-view').onclick = showView
   document.getElementById('tab-add').onclick = showAdd
