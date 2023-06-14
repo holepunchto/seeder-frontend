@@ -206,4 +206,5 @@ document.getElementById('add-bee-button').onclick = async () => {
   swarm.join(core.discoveryKey)
   swarm.flush()
   activateTabs()
+  showView()
 }
