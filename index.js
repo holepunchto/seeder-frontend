@@ -6,7 +6,7 @@ import Hyperswarm from 'hyperswarm'
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
 
-const createTableRow = (entry) => {
+function createTableRow (entry) {
   const row = document.createElement('tr')
   const key = document.createElement('td')
   const type = document.createElement('td')
@@ -23,7 +23,33 @@ const createTableRow = (entry) => {
   return row
 }
 
-const showView = () => {
+function onBeeNameInput (event) {
+  if (event.target.value) {
+    document.getElementById('add-bee-button').classList.remove('disabled-button')
+    document.getElementById('add-bee-button').classList.add('enabled-button')
+  } else {
+    document.getElementById('add-bee-button').classList.add('disabled-button')
+    document.getElementById('add-bee-button').classList.remove('enabled-button')
+  }
+}
+
+function onAddEntryInput (event) {
+  if (document.getElementById('public-key').value.length !== 0 &&
+      document.getElementById('description').value.length !== 0) {
+    document.getElementById('add-button').classList.remove('disabled-button')
+    document.getElementById('add-button').classList.add('enabled-button')
+  } else {
+    document.getElementById('add-button').classList.add('disabled-button')
+    document.getElementById('add-button').classList.remove('enabled-button')
+  }
+}
+
+function setActiveBee (name) {
+  Array.from(document.getElementById('seeders').children).forEach(e => e.classList.remove('active'))
+  Array.from(document.getElementById('seeders').children).find(e => e.getAttribute('name') === name).classList.add('active')
+}
+
+function showView () {
   document.getElementById('add-bee').classList.add('disabled')
   document.getElementById('add-form').classList.add('disabled')
   document.getElementById('placeholder').classList.add('disabled')
@@ -33,7 +59,7 @@ const showView = () => {
   document.getElementById('view-public-key').classList.remove('disabled')
 }
 
-const showAdd = () => {
+function showAdd () {
   document.getElementById('add-form').classList.remove('disabled')
   document.getElementById('view-table').classList.add('disabled')
   document.getElementById('add-bee').classList.add('disabled')
@@ -43,7 +69,7 @@ const showAdd = () => {
   document.getElementById('view-public-key').classList.add('disabled')
 }
 
-const showAddBee = () => {
+function showAddBee () {
   document.getElementById('add-bee').classList.remove('disabled')
   document.getElementById('view-table').classList.add('disabled')
   document.getElementById('add-form').classList.add('disabled')
@@ -51,16 +77,21 @@ const showAddBee = () => {
   document.getElementById('placeholder').classList.add('disabled')
 }
 
-const getNewEntry = () => {
+function getNewEntry () {
   const key = document.getElementById('public-key').value
   const type = document.getElementById('select-type').value
   const description = document.getElementById('description').value
   return { key, type, description }
 }
 
+function activateTabs () {
+  document.getElementById('tab-view').onclick = showView
+  document.getElementById('tab-add').onclick = showAdd
+}
+
 // Render single bee in table
 
-const renderBee = async (name) => {
+async function renderBee (name) {
   const core = store.get({ name })
   const bee = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'json' })
   await core.ready()
@@ -94,14 +125,9 @@ const renderBee = async (name) => {
   document.getElementById('view-public-key').classList.remove('disabled')
 }
 
-const setActiveBee = (name) => {
-  Array.from(document.getElementById('seeders').children).forEach(e => e.classList.remove('active'))
-  Array.from(document.getElementById('seeders').children).find(e => e.getAttribute('name') === name).classList.add('active')
-}
-
 // Render list of bees as buttons
 
-const renderBees = async (bees) => {
+async function renderBees (bees) {
   const beeButtons = document.getElementsByClassName('bee-button')
   while (beeButtons.length > 0) {
     beeButtons[beeButtons.length - 1].remove()
@@ -121,28 +147,7 @@ const renderBees = async (bees) => {
   }
 }
 
-const onBeeNameInput = (event) => {
-  if (event.target.value) {
-    document.getElementById('add-bee-button').classList.remove('disabled-button')
-    document.getElementById('add-bee-button').classList.add('enabled-button')
-  } else {
-    document.getElementById('add-bee-button').classList.add('disabled-button')
-    document.getElementById('add-bee-button').classList.remove('enabled-button')
-  }
-}
-
-const onAddEntryInput = (event) => {
-  if (document.getElementById('public-key').value.length !== 0 &&
-      document.getElementById('description').value.length !== 0) {
-    document.getElementById('add-button').classList.remove('disabled-button')
-    document.getElementById('add-button').classList.add('enabled-button')
-  } else {
-    document.getElementById('add-button').classList.add('disabled-button')
-    document.getElementById('add-button').classList.remove('enabled-button')
-  }
-}
-
-const addBee = async (name, file) => {
+async function addBee (name, file) {
   const core = store.get({ name: '__top__' })
   const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
   await core.ready()
@@ -154,11 +159,6 @@ const addBee = async (name, file) => {
   await renderBees(bees)
   await renderBee(name)
   setActiveBee(name)
-}
-
-const activateTabs = () => {
-  document.getElementById('tab-view').onclick = showView
-  document.getElementById('tab-add').onclick = showAdd
 }
 
 window.onload = async () => {
@@ -183,6 +183,7 @@ window.onload = async () => {
     swarm.join(core.key)
     lastBee = name
   }
+
   swarm.flush()
 
   if (lastBee) {
@@ -191,18 +192,18 @@ window.onload = async () => {
     activateTabs()
     showView()
   }
+}
 
-  document.getElementById('add-bee-toogle').onclick = showAddBee
-  document.getElementById('bee-name').onkeyup = onBeeNameInput
-  document.getElementById('public-key').onkeyup = onAddEntryInput
-  document.getElementById('description').onkeyup = onAddEntryInput
-  document.getElementById('add-bee-button').onclick = async () => {
-    const name = document.getElementById('bee-name').value
-    if (name.length) await addBee(name)
-    const core = store.get({ name })
-    await core.ready()
-    swarm.join(core.discoveryKey)
-    swarm.flush()
-    activateTabs()
-  }
+document.getElementById('add-bee-toogle').onclick = showAddBee
+document.getElementById('bee-name').onkeyup = onBeeNameInput
+document.getElementById('public-key').onkeyup = onAddEntryInput
+document.getElementById('description').onkeyup = onAddEntryInput
+document.getElementById('add-bee-button').onclick = async () => {
+  const name = document.getElementById('bee-name').value
+  if (name.length) await addBee(name)
+  const core = store.get({ name })
+  await core.ready()
+  swarm.join(core.discoveryKey)
+  swarm.flush()
+  activateTabs()
 }
