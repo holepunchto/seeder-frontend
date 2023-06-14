@@ -6,19 +6,32 @@ import Hyperswarm from 'hyperswarm'
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
 
-function createTableRow (entry) {
+function createTableRow (entry, bee) {
   const row = document.createElement('tr')
   const key = document.createElement('td')
   const type = document.createElement('td')
   const description = document.createElement('td')
+  const remove = document.createElement('td')
 
   key.innerHTML = entry.key.toString('hex')
   type.innerHTML = entry.value.type
   description.innerHTML = entry.value.description
+  remove.innerHTML = 'Remove'
+  remove.classList.add('remove-button')
 
   row.append(key)
   row.append(type)
   row.append(description)
+  row.append(remove)
+
+  remove.onclick = () => {
+    row.remove()
+    bee.del(entry.key)
+    if (!document.getElementById('view-table-body').children.length) {
+      document.getElementById('bee-entries').classList.add('disabled')
+      document.getElementById('bee-placeholder').classList.remove('disabled')
+    }
+  }
 
   return row
 }
@@ -103,7 +116,7 @@ async function renderBee (name) {
 
   for await (const entry of bee.createReadStream()) {
     hasEntries = true
-    tableBody.append(createTableRow(entry))
+    tableBody.append(createTableRow(entry, bee))
   }
 
   document.getElementById('add-button').onclick = async () => {
@@ -205,6 +218,7 @@ document.getElementById('add-bee-button').onclick = async () => {
   await core.ready()
   swarm.join(core.discoveryKey)
   swarm.flush()
+
   activateTabs()
   showView()
 }
