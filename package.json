@@ -7,7 +7,8 @@
     "fix": "standard --fix",
     "stage": "pear stage pear-seeder",
     "release": "pear release pear-seeder",
-    "seed": "pear seed pear-seeder"
+    "seed": "pear seed pear-seeder",
+    "test": "standard"
   },
   "holepunch": {
     "gui": {
