@@ -10,13 +10,14 @@
     <h1>🍐Seeder</h1>
     <div class="tab">
       <button id="tab-view">View</button>
-      <button id="tab-add">Add</button>
+      <button id="tab-add">Add Entry</button>
+      <button id="tab-configuration">Configuration</button>
       <div id="seeders">
-        <button id="add-bee-toogle" class="active">+</button>
+        <button id="add-bee-toogle" class="active">New...</button>
       </div>
     </div>
     <div id="placeholder">
-      <h3> Select a seeder or create new one using the + button </h3>
+      <h3> Select a seeder or create new one using the "New..." button </h3>
     </div>
     <div id="view-table">
       <div id="bee-placeholder" class="disabled">
@@ -42,7 +43,7 @@
     <div id="add-form" class="disabled">
       <input id="public-key" type="text" spellcheck="false" placeholder="Public key">
       <input id="description" type="text" spellcheck="false" placeholder="Description">
-      <select id="select-type" id="type">
+      <select id="select-type">
         <option value="core">core</option>
         <option value="bee">bee</option>
         <option value="drive">drive</option>

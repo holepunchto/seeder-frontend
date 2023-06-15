@@ -12,7 +12,7 @@
   },
   "holepunch": {
     "gui": {
-      "height": 800,
+      "height": 700,
       "width": 1200,
       "resizable": false
     },

@@ -1,22 +1,36 @@
 :root {
-    --main-fg-color: #f9f9f9;
-    --main-bg-color: #05070a;
-    --secondary-fg-color: #bbb;
+/*
+    --main-bg-color: #f9f9f9;
+    --secondary-bg-color: #f5f5f5;
+    --tertiary-bg-color: #d1d1d1;
+    --main-fg-color: #05070a;
+    --secondary-fg-color: #a1a1a1;
     --tertiary-fg-color: #e5ebfb;
+*/
+    --main-bg-color; #151623;
+    --secondary-bg-color: #f5f5f5;
+    --tertiary-bg-color: #62649e;
+    --main-fg-color: #f0f3f5;
+    --secondary-fg-color: #62649e;
+    --tertiary-fg-color: #333554;
 }
 
 * {
     font-family: 'Maven Pro', sans-serif;
     z-index: 0;
+    color: var(--main-fg-color);
+}
+
+*:focus {
+    outline: 1px solid var(--secondary-bg-color);
 }
 
 body {
-    background-color: var(--main-bg-color);
     overflow: hidden;
 }
 
 #placeholder, #drag-and-drop, #bee-placeholder {
-    background-color: var(--main-fg-color);
+    background-color: var(--main-bg-color);
     text-align: center;
     margin-top: 30vh;
     color: var(--secondary-fg-color);
@@ -32,13 +46,23 @@ body {
     font-weight: bold;
 }
 
+#drag-and-drop p {
+    color: var(--secondary-fg-color);
+}
+
 #bee-placeholder {
     margin-bottom: 20px;
+    border: 0px;
+    box-shadow: 0px 0px;
+}
+
+#bee-placeholder h3 {
+    color: var(--secondary-fg-color);
 }
 
 .tab {
     overflow: hidden;
-    background-color: var(--main-fg-color);
+    background-color: var(--main-bg-color);
     cursor: pointer;
 }
 
@@ -61,7 +85,7 @@ body {
 
 .tab button.active {
     background-color: var(--tertiary-fg-color);
-    color: var(--main-bg-color);
+    color: var(--main-fg-color);
 }
 
 table {
@@ -73,11 +97,12 @@ table {
 th, td {
     padding: 12px;
     text-align: left;
+    color: var(--main-fg-color);
 }
 
 th {
-    background-color: #f5f5f5;
     font-weight: bold;
+    background-color: var(--tertiary-bg-color);
 }
 
 tr:hover {
@@ -86,14 +111,13 @@ tr:hover {
 
 /* CSS for the page */
 body {
-    background-color: var(--main-fg-color);
+    background-color: var(--main-bg-color);
     margin: 0;
     padding: 20px;
     font-family: Arial, sans-serif;
 }
 
 h1 {
-    color: #333;
     margin-bottom: 30px;
 }
 
@@ -113,13 +137,20 @@ h1 {
     border:none;
     margin-top: 3%;
     width: 80%;
+    background-color: var(--main-bg-color);
     border: 1px solid var(--tertiary-fg-color);
     box-shadow: 2px 2px var(--tertiary-fg-color);
+    color: var(--main-fg-color)
+}
+
+#bee-name {
+    width: 27vw;
 }
 
 #select-type {
     display: block;
-    padding: 12px;
+    width: 10vw;
+    padding: 10px;
     font-size: 100%;
     border-radius: 5px;
     border:none;
@@ -127,9 +158,13 @@ h1 {
     border: 1px solid var(--tertiary-fg-color);
     box-shadow: 2px 2px var(--tertiary-fg-color);
     border-right: 16px solid transparent;
-    background-color: white;
+    background-color: var(--secondary-fg-color);
+    color: var(--main-fg-color);
 }
 
+option {
+    background-color: var(--tertiary-fg-color);
+}
 
 #add-button, #add-bee-button {
     padding: 12px;
@@ -158,15 +193,18 @@ h1 {
 #view-public-key {
     border: 1px solid var(--tertiary-fg-color);
     text-align: center;
-    color: var(--secondary-fg-color);
     box-shadow: 2px 2px var(--tertiary-fg-color);
     border-radius: 10px;
-    background-color: #f5f5f5;
+    background-color: var(--main-bg-color);
+}
+
+#view-public-key p {
+    color: var(--secondary-fg-color);
 }
 
 .disabled-button {
     background-color: var(--tertiary-fg-color);
-    color: var(--main-fg-color);
+    color: var(--main-bg-color);
 }
 
 .enabled-button {
@@ -180,9 +218,10 @@ h1 {
 }
 
 #view-table {
-    height: 52vh;
+    height: 53vh;
     overflow-y: auto;
     margin-bottom: 20px;
+    border: 1px solid var(--tertiary-fg-color);
     box-shadow: 2px 2px var(--tertiary-fg-color);
 }
 
@@ -191,7 +230,7 @@ h1 {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--main-fg-color)
+  background: var(--main-bg-color)
 }
 
 ::-webkit-scrollbar-thumb {
