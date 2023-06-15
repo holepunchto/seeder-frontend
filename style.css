@@ -28,6 +28,7 @@ body {
 #drag-and-drop {
     margin-top: 2vh;
     padding: 10vh;
+    font-weight: bold;
 }
 
 #bee-placeholder {

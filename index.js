@@ -60,6 +60,25 @@ function onAddEntryInput (event) {
   }
 }
 
+async function onAddBeeButton () {
+  const name = document.getElementById('bee-name').value
+  if (name.length) {
+    await addBee(name)
+    const bee = await getBeeByName(name)
+    swarm.join(bee.core.discoveryKey)
+    swarm.flush()
+    activateTabs()
+    showView()
+  }
+}
+
+async function onDropFile (event) {
+  event.preventDefault()
+  event.stopPropagation()
+  const file = event.dataTransfer.files[0]
+  seederFile = tinyConfig.parse(await readFile(file.path))
+}
+
 function setActiveBee (name) {
   Array.from(document.getElementById('seeders').children).forEach(e => e.classList.remove('active'))
   Array.from(document.getElementById('seeders').children).find(e => e.getAttribute('name') === name).classList.add('active')
@@ -185,7 +204,6 @@ async function addBee (name, file) {
   await bees.put(name)
 
   if (seederFile) {
-    console.log('sederFile')
     await Promise.all(seederFile.map(e => {
       const [type, key] = e.split(' ')
       return bee.put(key, { type })
@@ -227,26 +245,9 @@ document.getElementById('add-bee-toogle').onclick = showAddBee
 document.getElementById('bee-name').onkeyup = onBeeNameInput
 document.getElementById('public-key').onkeyup = onAddEntryInput
 document.getElementById('description').onkeyup = onAddEntryInput
-document.getElementById('add-bee-button').onclick = async () => {
-  const name = document.getElementById('bee-name').value
-  if (name.length) await addBee(name)
-  const core = store.get({ name })
-  await core.ready()
-  swarm.join(core.discoveryKey)
-  swarm.flush()
-
-  activateTabs()
-  showView()
-}
-
-document.addEventListener('dragover', async (e) => {
+document.getElementById('add-bee-button').onclick = onAddBeeButton
+document.getElementById('drag-and-drop').addEventListener('drop', onDropFile)
+document.addEventListener('dragover', (e) => {
   e.preventDefault()
   e.stopPropagation()
-})
-
-document.getElementById('drag-and-drop').addEventListener('drop', async (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  const file = e.dataTransfer.files[0]
-  seederFile = tinyConfig.parse(await readFile(file.path))
 })
