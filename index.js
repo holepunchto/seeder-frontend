@@ -1,10 +1,13 @@
+import tinyConfig from 'tiny-configs'
 import holepunch from 'holepunch://app'
 import Hyperbee from 'hyperbee'
 import Corestore from 'corestore'
 import Hyperswarm from 'hyperswarm'
+import { readFile } from 'fs/promises'
 
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
+let seederFile = null
 
 function createTableRow (entry, bee) {
   const row = document.createElement('tr')
@@ -15,7 +18,7 @@ function createTableRow (entry, bee) {
 
   key.innerHTML = entry.key.toString('hex')
   type.innerHTML = entry.value.type
-  description.innerHTML = entry.value.description
+  description.innerHTML = entry.value.description || '-'
   remove.innerHTML = 'Remove'
   remove.classList.add('remove-button')
 
@@ -102,18 +105,32 @@ function activateTabs () {
   document.getElementById('tab-add').onclick = showAdd
 }
 
-// Render single bee in table
-
-async function renderBee (name) {
+async function getBeeByName (name) {
+  await store.ready()
   const core = store.get({ name })
   const bee = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'json' })
   await core.ready()
   await bee.ready()
+  return bee
+}
 
-  let hasEntries = false
+async function getBeesDB () {
+  await store.ready()
+  const core = store.get({ name: '__top__' })
+  const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
+  await core.ready()
+  await bees.ready()
+  return bees
+}
+
+// Render single bee in table
+
+async function renderBee (name) {
+  const bee = await getBeeByName(name)
   const tableBody = document.getElementById('view-table-body')
   tableBody.innerHTML = ''
 
+  let hasEntries = false
   for await (const entry of bee.createReadStream()) {
     hasEntries = true
     tableBody.append(createTableRow(entry, bee))
@@ -134,8 +151,10 @@ async function renderBee (name) {
     document.getElementById('bee-entries').classList.remove('disabled')
   }
   document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + core.key.toString('hex')
+  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + bee.core.key.toString('hex')
   document.getElementById('view-public-key').classList.remove('disabled')
+
+  return bee
 }
 
 // Render list of bees as buttons
@@ -161,13 +180,18 @@ async function renderBees (bees) {
 }
 
 async function addBee (name, file) {
-  const core = store.get({ name: '__top__' })
-  const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
-  await core.ready()
-  await bees.ready()
+  const bees = await getBeesDB()
+  const bee = await getBeeByName(name)
   await bees.put(name)
 
-  // add file if (file) {}
+  if (seederFile) {
+    console.log('sederFile')
+    await Promise.all(seederFile.map(e => {
+      const [type, key] = e.split(' ')
+      return bee.put(key, { type })
+    }))
+    seederFile = null // reset file
+  }
 
   await renderBees(bees)
   await renderBee(name)
@@ -175,16 +199,7 @@ async function addBee (name, file) {
 }
 
 window.onload = async () => {
-  await store.ready()
-  const core = store.get({ name: '__top__' })
-  const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
-  await core.ready()
-  await bees.ready()
-
-  swarm.on('connection', (conn) => {
-    store.replicate(conn)
-  })
-
+  const bees = await getBeesDB()
   await renderBees(bees)
 
   let lastBee = null
@@ -197,14 +212,15 @@ window.onload = async () => {
     lastBee = name
   }
 
-  swarm.flush()
-
   if (lastBee) {
     await renderBee(lastBee)
     setActiveBee(lastBee)
     activateTabs()
     showView()
   }
+
+  swarm.on('connection', (conn) => store.replicate(conn))
+  swarm.flush()
 }
 
 document.getElementById('add-bee-toogle').onclick = showAddBee
@@ -222,3 +238,15 @@ document.getElementById('add-bee-button').onclick = async () => {
   activateTabs()
   showView()
 }
+
+document.addEventListener('dragover', async (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+})
+
+document.getElementById('drag-and-drop').addEventListener('drop', async (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  const file = e.dataTransfer.files[0]
+  seederFile = tinyConfig.parse(await readFile(file.path))
+})

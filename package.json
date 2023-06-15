@@ -30,6 +30,7 @@
     "hypercore": "^10.13.0",
     "hyperswarm": "^4.5.0",
     "random-access-memory": "^6.2.0",
-    "ready-resource": "^1.0.0"
+    "ready-resource": "^1.0.0",
+    "tiny-configs": "^1.1.0"
   }
 }

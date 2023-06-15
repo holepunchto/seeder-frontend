@@ -178,3 +178,20 @@ h1 {
    text-decoration: underline;
    cursor: pointer;
 }
+
+#view-table {
+    height: 52vh;
+    overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--main-fg-color)
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--secondary-fg-color)
+}
