@@ -192,10 +192,10 @@ option {
 
 #view-public-key {
     border: 1px solid var(--tertiary-fg-color);
-    text-align: center;
     box-shadow: 2px 2px var(--tertiary-fg-color);
     border-radius: 10px;
     background-color: var(--main-bg-color);
+    padding-left: 20px;
 }
 
 #view-public-key p {

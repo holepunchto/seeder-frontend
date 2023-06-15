@@ -8,6 +8,7 @@ import { readFile } from 'fs/promises'
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
 let seederFile = null
+let peersLengthInterval = null
 
 function createTableRow (entry, bee) {
   const row = document.createElement('tr')
@@ -179,6 +180,11 @@ async function renderBee (name) {
   document.getElementById('placeholder').classList.add('disabled')
   document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + bee.core.key.toString('hex')
   document.getElementById('view-public-key').classList.remove('disabled')
+
+  if (peersLengthInterval) clearInterval(peersLengthInterval)
+  const updatePeersLength = () => document.getElementById('core-peers').innerHTML = 'Connected peers: ' + bee.core.peers.length
+  peersLengthInterval = setInterval(updatePeersLength, 2500)
+  updatePeersLength()
 
   return bee
 }
