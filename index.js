@@ -60,6 +60,12 @@ function onAddEntryInput (event) {
   }
 }
 
+function resetAddBeeForm () {
+  seederFile = null
+  document.getElementById('drag-and-drop-text').innerHTML = 'Drag a seeder file here'
+  document.getElementById('bee-name').value = ''
+}
+
 async function onAddBeeButton () {
   const name = document.getElementById('bee-name').value
   if (name.length) {
@@ -77,6 +83,7 @@ async function onDropFile (event) {
   event.stopPropagation()
   const file = event.dataTransfer.files[0]
   seederFile = tinyConfig.parse(await readFile(file.path))
+  document.getElementById('drag-and-drop-text').innerHTML = 'File: ' + file.path
 }
 
 function setActiveBee (name) {
@@ -241,12 +248,15 @@ window.onload = async () => {
   swarm.flush()
 }
 
-document.getElementById('add-bee-toogle').onclick = showAddBee
 document.getElementById('bee-name').onkeyup = onBeeNameInput
 document.getElementById('public-key').onkeyup = onAddEntryInput
 document.getElementById('description').onkeyup = onAddEntryInput
 document.getElementById('add-bee-button').onclick = onAddBeeButton
 document.getElementById('drag-and-drop').addEventListener('drop', onDropFile)
+document.getElementById('add-bee-toogle').onclick = () => {
+  resetAddBeeForm()
+  showAddBee()
+}
 document.addEventListener('dragover', (e) => {
   e.preventDefault()
   e.stopPropagation()
