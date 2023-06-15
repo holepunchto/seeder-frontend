@@ -12,6 +12,7 @@
 
 body {
     background-color: var(--main-bg-color);
+    overflow: hidden;
 }
 
 #placeholder, #drag-and-drop, #bee-placeholder {
@@ -67,8 +68,6 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-family: Arial, sans-serif;
-    margin-bottom: 20px;
-    box-shadow: 2px 2px var(--tertiary-fg-color);
 }
 
 th, td {
@@ -183,6 +182,8 @@ h1 {
 #view-table {
     height: 52vh;
     overflow-y: auto;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px var(--tertiary-fg-color);
 }
 
 ::-webkit-scrollbar {
