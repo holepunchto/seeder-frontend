@@ -4,6 +4,7 @@ import Corestore from 'corestore'
 import Hyperswarm from 'hyperswarm'
 import { readFile } from 'fs/promises'
 import SeedBee from 'seedbee'
+import { encode } from 'hypercore-id-encoding'
 
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
@@ -189,11 +190,11 @@ async function renderBee (name) {
     document.getElementById('bee-entries').classList.remove('disabled')
   }
   document.getElementById('placeholder').classList.add('disabled')
-  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + bee.core.key.toString('hex')
+  document.getElementById('view-public-key-value').innerHTML = 'Public key: ' + encode(bee.core.key).toString()
   document.getElementById('view-public-key').classList.remove('disabled')
 
   if (peersLengthInterval) clearInterval(peersLengthInterval)
-  const updatePeersLength = () => document.getElementById('core-peers').innerHTML = 'Connected peers: ' + bee.core.peers.length
+  const updatePeersLength = () => document.getElementById('core-peers').innerHTML = 'Connected peers: ' + bee.core.peers.length // eslint-disable-line
   peersLengthInterval = setInterval(updatePeersLength, 2500)
   updatePeersLength()
 
