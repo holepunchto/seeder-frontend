@@ -1,9 +1,9 @@
-import tinyConfig from 'tiny-configs'
 import holepunch from 'holepunch://app'
 import Hyperbee from 'hyperbee'
 import Corestore from 'corestore'
 import Hyperswarm from 'hyperswarm'
 import { readFile } from 'fs/promises'
+import SeedBee from 'seedbee'
 
 const swarm = new Hyperswarm()
 const store = new Corestore(holepunch.config.storage)
@@ -18,7 +18,7 @@ function createTableRow (entry, bee) {
   const remove = document.createElement('td')
 
   key.innerHTML = entry.key.toString('hex')
-  type.innerHTML = entry.value.type
+  type.innerHTML = entry.value.seeders ? entry.value.type + '/seeder' : entry.value.type
   description.innerHTML = entry.value.description || '-'
   remove.innerHTML = 'Remove'
   remove.classList.add('remove-button')
@@ -30,7 +30,6 @@ function createTableRow (entry, bee) {
 
   remove.onclick = () => {
     row.remove()
-    bee.del(entry.key)
     if (!document.getElementById('view-table-body').children.length) {
       document.getElementById('bee-entries').classList.add('disabled')
       document.getElementById('bee-placeholder').classList.remove('disabled')
@@ -79,11 +78,23 @@ async function onAddBeeButton () {
   }
 }
 
+function parseSeederFile (file) {
+  const parseLine = (line, next) => {
+    const tokens = line.split(' ')
+    const type = tokens[0]
+    const key = tokens[1]
+    const description = tokens.splice(3).join(' ')
+    return { type, key, description: description.length > 1 ? description : 'No description provided.' }
+  }
+  return file.toString().split('\n').filter(e => e.length > 1 && e[0] !== '#' && e[0] !== 'seeder').map((line, index, lines) => parseLine(line, lines[index + 1]))
+}
+
 async function onDropFile (event) {
   event.preventDefault()
   event.stopPropagation()
   const file = event.dataTransfer.files[0]
-  seederFile = tinyConfig.parse(await readFile(file.path))
+  seederFile = parseSeederFile(await readFile(file.path))
+  console.log(seederFile)
   document.getElementById('drag-and-drop-text').innerHTML = 'File: ' + file.path
 }
 
@@ -135,7 +146,7 @@ function activateTabs () {
 async function getBeeByName (name) {
   await store.ready()
   const core = store.get({ name })
-  const bee = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'json' })
+  const bee = new SeedBee(core)
   await core.ready()
   await bee.ready()
   return bee
@@ -158,7 +169,7 @@ async function renderBee (name) {
   tableBody.innerHTML = ''
 
   let hasEntries = false
-  for await (const entry of bee.createReadStream()) {
+  for await (const entry of bee.entries()) {
     hasEntries = true
     tableBody.append(createTableRow(entry, bee))
   }
@@ -217,10 +228,14 @@ async function addBee (name, file) {
   await bees.put(name)
 
   if (seederFile) {
-    await Promise.all(seederFile.map(e => {
-      const [type, key] = e.split(' ')
-      return bee.put(key, { type })
-    }))
+    for (const seed of seederFile) {
+      if (seed.type === 'seeder') {
+        const prev = await bee.get(seed.key)
+        if (prev) await bee.put(seed.key, { ...prev, seeders: true })
+      } else {
+        if (seed.key) await bee.put(seed.key, { type: seed.type, description: seed.description })
+      }
+    }
     seederFile = null // reset file
   }
 
