@@ -1,14 +1,19 @@
 import { html } from 'htm/preact'
 
 function ViewTable (props) {
-  const formatEntries = (entries) => {
-    return entries.map(e => {
+  const removeEntry = (key) => {
+    props.setEntries(props.entries.filter(e => e.key.toString('hex') !== key.toString('hex')))
+    props.bee.del(key)
+  }
+
+  const formatEntries = () => {
+    return props.entries.map(e => {
       return html`
               <tr>
                 <td>${e.key.toString('hex')}</td>
                 <td>${e.value.seeders ? e.value.type + '/seeder' : e.value.type}</td>
                 <td>${e.value.description}</td>
-                <td>Remove</td>
+                <td class="remove-button" onclick=${() => removeEntry(e.key)}>Remove</td>
               </tr>
         `
     })
@@ -29,7 +34,7 @@ function ViewTable (props) {
          </tr>
        </thead>
        <tbody id="view-table-body">
-            ${formatEntries(props.entries)}
+            ${formatEntries()}
        </tbody>
      </table>
    </div>

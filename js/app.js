@@ -40,14 +40,14 @@ function App (props) {
   const renderMain = (setView) => {
     return html`
       <${Placeholder} bees=${bees}/>
-      <${ViewTable} entries=${entries}/>
+      <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee}/>
       <${BeeInformation} bee=${bee}/>
 `
   }
 
   const renderAddEntry = () => {
     return html`
-      <${AddEntry} bee=${bee} setEntries=${setEntries}/>
+      <${AddEntry} bee=${bee} setEntries=${setEntries} setView=${setView}/>
 `
   }
 
@@ -84,12 +84,12 @@ function App (props) {
     const activeBee = bees.find(e => e.key === activeBeeName)
     if (activeBee && store) {
       const selectedBee = await getBeeByName(store, activeBee.key)
-      setActiveBeeName(activeBee.key)
-      setBee(selectedBee)
       const updatedEntries = []
       for await (const entry of selectedBee.entries()) {
         updatedEntries.push(entry)
       }
+      setActiveBeeName(activeBee.key)
+      setBee(selectedBee)
       setEntries(updatedEntries)
     }
   }, [activeBeeName])

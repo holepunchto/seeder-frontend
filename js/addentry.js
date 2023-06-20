@@ -9,6 +9,7 @@ function AddEntry (props) {
   const createEntry = () => {
     props.bee.put(key, { description, type })
     props.setEntries(e => [...e, { key, value: { description, type } }])
+    props.setView('main')
   }
 
   return html`
