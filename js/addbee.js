@@ -1,22 +1,60 @@
+import { readFile } from 'fs/promises'
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks'
+import SeedBee from 'seedbee'
 
 function AddBee (props) {
   const [name, setName] = useState(null)
+  const [entries, setEntries] = useState([])
 
-  const addBee = (name, bees, setBees, db) => {
+  const addEntries = async (store, name, entries) => {
+    const core = store.get({ name })
+    const bee = new SeedBee(core)
+    await core.ready()
+    await bee.ready()
+    await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type })))
+  }
+
+  const addBee = async (name, bees, setBees, db, store) => {
     const bee = { key: name }
     setBees(e => [...e, bee])
     db.put(name)
+    await addEntries(store, name, entries)
+    props.setActiveBeeName(name)
+    props.setView('main')
+  }
+
+  const parseSeederFile = (file) => {
+    const parseLine = (line, next) => {
+      const tokens = line.split(' ')
+      const type = tokens[0]
+      const key = tokens[1]
+      const description = tokens.splice(3).join(' ')
+      return { type, key, description: description.length > 1 ? description : 'No description provided.' }
+    }
+    return file.toString()
+      .split('\n')
+      .filter(e => e.length > 1 && e[0] !== '#' && e.split(' ')[0] !== 'seeder')
+      .map((line, index, lines) => parseLine(line, lines[index + 1]))
+  }
+
+  const onDragOver = (event) => {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+
+  const onDrop = async (event) => {
+    const file = event.dataTransfer.files[0]
+    setEntries(parseSeederFile(await readFile(file.path)))
   }
 
   return html`
    <div id="add-bee">
      <input id="bee-name" type="text" spellcheck="false" placeholder="Name" onChange=${(e) => setName(e.target.value)}/>
-     <div id="drag-and-drop">
+     <div id="drag-and-drop" ondragover=${onDragOver} ondrop=${onDrop}>
        <p id="drag-and-drop-text"> Drag a seeder file here </p>
      </div>
-     <p id="add-bee-button" class="disabled-button" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db)}>Add Seeder</p>
+     <p id="add-bee-button" class="disabled-button" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db, props.store)}>Add Seeder</p>
    </div>
 `
 }

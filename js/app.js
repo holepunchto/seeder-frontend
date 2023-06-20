@@ -53,7 +53,7 @@ function App (props) {
 
   const renderAddBee = () => {
     return html`
-      <${AddBee} bees=${bees} db=${db} setBees=${setBees}/>
+      <${AddBee} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
 `
   }
 
