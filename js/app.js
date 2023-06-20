@@ -47,7 +47,7 @@ function App (props) {
 
   const renderAddEntry = () => {
     return html`
-      <${AddEntry} bee=${bee}/>
+      <${AddEntry} bee=${bee} setEntries=${setEntries}/>
 `
   }
 
@@ -83,8 +83,14 @@ function App (props) {
   useEffect(async () => {
     const activeBee = bees.find(e => e.key === activeBeeName)
     if (activeBee && store) {
+      const selectedBee = await getBeeByName(store, activeBee.key)
       setActiveBeeName(activeBee.key)
-      setBee(await getBeeByName(store, activeBee.key))
+      setBee(selectedBee)
+      const updatedEntries = []
+      for await (const entry of selectedBee.entries()) {
+        updatedEntries.push(entry)
+      }
+      setEntries(updatedEntries)
     }
   }, [activeBeeName])
 
