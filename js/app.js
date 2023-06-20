@@ -17,6 +17,9 @@ function App (props) {
   const [entries, setEntries] = useState([])
   const [bee, setBee] = useState(null)
   const [bees, setBees] = useState([])
+  const [view, setView] = useState('main')
+  const [db, setDB] = useState(null)
+  const [activeBeeName, setActiveBeeName] = useState(null)
 
   const getBeesDB = async (store) => {
     const core = store.get({ name: '__top__' })
@@ -34,6 +37,26 @@ function App (props) {
     return bee
   }
 
+  const renderMain = (setView) => {
+    return html`
+      <${Placeholder} bees=${bees}/>
+      <${ViewTable} entries=${entries}/>
+      <${BeeInformation} bee=${bee}/>
+`
+  }
+
+  const renderAddEntry = () => {
+    return html`
+      <${AddEntry} bee=${bee}/>
+`
+  }
+
+  const renderAddBee = () => {
+    return html`
+      <${AddBee} bees=${bees} db=${db} setBees=${setBees}/>
+`
+  }
+
   useEffect(async () => {
     const store = new Corestore(holepunch.config.storage)
     await store.ready()
@@ -47,26 +70,31 @@ function App (props) {
           setEntries(e => [...e, entry])
         }
         setBee(activeBee)
+        setActiveBeeName(beeInfo.key)
       }
       setBees(e => [...e, beeInfo])
     }
     setStore(store)
+    setDB(beesDB)
     swarm.on('connection', (conn) => store.replicate(conn))
     swarm.flush()
   }, [])
 
+  useEffect(async () => {
+    const activeBee = bees.find(e => e.key === activeBeeName)
+    if (activeBee && store) {
+      setActiveBeeName(activeBee.key)
+      setBee(await getBeeByName(store, activeBee.key))
+    }
+  }, [activeBeeName])
+
   return html`
     <h1>🍐Seeder</h1>
-    <${Tab} bees=${bees}/>
-    <${Placeholder} entries=${entries}/>
-    <${ViewTable} entries=${entries}/>
-    <${BeeInformation} bee=${bee}/>
+    <${Tab} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}/>
+    ${view === 'main' && renderMain()}
+    ${view === 'add-entry' && renderAddEntry()}
+    ${view === 'add-bee' && renderAddBee()}
 `
 }
 
-render(
-  html`
-    <${App}/>
-  `,
-  document.body
-)
+render(html`<${App}/>`, document.body)

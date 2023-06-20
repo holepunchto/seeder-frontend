@@ -1,21 +1,22 @@
 import { html } from 'htm/preact'
 
 function Tab (props) {
-  const renderBees = (bees) => {
-    return bees.map(e => {
+  const renderBees = (bees, activeBeeName) => {
+    return bees.map((e, i) => {
+      const setActiveBeeName = () => props.setActiveBeeName(e.key)
       return html`
-            <button name="${e.key}" class="bee-button">${e.key}</button>
+            <button name="${e.key}" onclick=${setActiveBeeName} class=${e.key === activeBeeName ? 'bee-button active' : 'bee-button'}>${e.key}</button>
         `
     })
   }
 
   return html`
     <div class="tab">
-      <button id="tab-view">View</button>
-      <button id="tab-add">Add Entry</button>
+      <button id="tab-view" onclick=${() => props.setView('main')}>View</button>
+      <button id="tab-add" onclick=${() => props.setView('add-entry')}>Add Entry</button>
       <div id="seeders">
-        ${renderBees(props.bees)}
-        <button id="add-bee-toogle" class="active">New...</button>
+        ${renderBees(props.bees, props.activeBeeName)}
+        <button id="add-bee-toogle" class="active"  onclick=${() => props.setView('add-bee')}>New...</button>
       </div>
     </div>
 `

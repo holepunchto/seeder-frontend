@@ -16,10 +16,10 @@ function ViewTable (props) {
 
   return html`
    <div id="view-table">
-     <div id="bee-placeholder" class="disabled">
+     <div id="bee-placeholder" class="${props.entries.length ? 'disabled' : ''}">
        <h3> This seeder does not have any entry yet. Use the "Add" tab to add a new entry </h3>
      </div>
-     <table id="bee-entries">
+     <table id="bee-entries"  class="${!props.entries.length ? 'disabled' : ''}">
        <thead>
          <tr>
            <th>Key</th>
