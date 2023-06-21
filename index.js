@@ -7,7 +7,7 @@ import SeedBee from 'seedbee'
 import { encode } from 'hypercore-id-encoding'
 
 const swarm = new Hyperswarm()
-const store = new Corestore(holepunch.config.storage)
+const store = new Corestore(holepunch.config.storage).namespace('pear-seeder-v2')
 let seederFile = null
 let peersLengthInterval = null
 
