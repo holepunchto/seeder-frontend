@@ -56,7 +56,7 @@ function AddBee (props) {
      <div id="drag-and-drop" ondragover=${onDragOver} ondrop=${onDrop}>
        <p id="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
-     <p id="add-bee-button" class="disabled-button" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db, props.store)}>Add Seeder</p>
+     <p id="add-bee-button" class="${name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db, props.store)}>Add Seeder</p>
    </div>
 `
 }
