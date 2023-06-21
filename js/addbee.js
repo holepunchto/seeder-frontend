@@ -13,7 +13,7 @@ function AddBee (props) {
     const bee = new SeedBee(core)
     await core.ready()
     await bee.ready()
-    await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type })))
+    await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type, seeders: e.seeders })))
   }
 
   const addBee = async (name, bees, setBees, db, store) => {
@@ -37,6 +37,7 @@ function AddBee (props) {
       .split('\n')
       .filter(e => e.length > 1 && e[0] !== '#' && e.split(' ')[0] !== 'seeder')
       .map((line, index, lines) => parseLine(line, lines[index + 1]))
+      .map(e => ({ ...e, seeders: file.toString().includes('seeder ' + e.key.toString('hex')) }))
   }
 
   const onDragOver = (event) => {
