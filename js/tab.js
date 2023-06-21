@@ -12,8 +12,8 @@ function Tab (props) {
 
   return html`
     <div class="tab">
-      <button id="tab-view" onclick=${() => props.setView('main')}>View</button>
-      <button id="tab-add" onclick=${() => props.setView('add-entry')}>Add Entry</button>
+      <button id="tab-view" class="${props.view === 'main' ? 'active' : ''}" onclick=${() => props.setView('main')}>View</button>
+      <button id="tab-add" class="${props.view === 'add-entry' ? 'active' : ''}" onclick=${() => props.setView('add-entry')}>Add Entry</button>
       <div id="seeders">
         ${renderBees(props.bees, props.activeBeeName)}
         <button id="add-bee-toogle" class="active"  onclick=${() => props.setView('add-bee')}>New...</button>
@@ -21,4 +21,5 @@ function Tab (props) {
     </div>
 `
 }
+
 export default Tab

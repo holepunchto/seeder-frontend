@@ -101,7 +101,7 @@ function App (props) {
 
   return html`
     <h1>🍐Seeder</h1>
-    <${Tab} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}/>
+    <${Tab} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
     ${view === 'add-bee' && renderAddBee()}
