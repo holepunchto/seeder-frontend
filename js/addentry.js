@@ -5,10 +5,11 @@ function AddEntry (props) {
   const [key, setKey] = useState(null)
   const [type, setType] = useState('core') // default value
   const [description, setDescription] = useState(null)
+  const [seeders, setSeeders] = useState(false)
 
   const createEntry = () => {
-    props.bee.put(key, { description, type })
-    props.setEntries(e => [...e, { key, value: { description, type } }])
+    props.bee.put(key, { description, type, seeders })
+    props.setEntries(e => [...e, { key, value: { description, type, seeders } }])
     props.setView('main')
   }
 
@@ -21,6 +22,7 @@ function AddEntry (props) {
        <option value="bee">bee</option>
        <option value="drive">drive</option>
      </select>
+     <label>Seeders<input type="checkbox" class="checkbox" onchange=${(e) => setSeeders(e.target.value)}/></label>
      <p id="add-button" class="disabled-button" onclick=${createEntry}>Add Entry</p>
    </div>
 `

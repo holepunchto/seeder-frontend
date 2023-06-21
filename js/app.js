@@ -63,7 +63,7 @@ function App (props) {
   }
 
   useEffect(async () => {
-    const store = new Corestore(holepunch.config.storage)
+    const store = new Corestore(holepunch.config.storage).namespace('pear-seeder-v2')
     await store.ready()
     const beesDB = await getBeesDB(store)
     const swarm = new Hyperswarm()
