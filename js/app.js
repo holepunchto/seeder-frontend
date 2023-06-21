@@ -37,24 +37,29 @@ function App (props) {
     return bee
   }
 
-  const renderMain = (setView) => {
-    return html`
-      <${Placeholder} bees=${bees}/>
-      <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee}/>
-      <${BeeInformation} bee=${bee}/>
-`
+  const renderMain = () => {
+    if (bee) {
+      return html`
+        <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee}/>
+        <${BeeInformation} bee=${bee}/>
+      `
+    } else {
+      return html`
+        <${Placeholder} bees=${bees}/>
+      `
+    }
   }
 
   const renderAddEntry = () => {
     return html`
       <${AddEntry} bee=${bee} setEntries=${setEntries} setView=${setView}/>
-`
+    `
   }
 
   const renderAddBee = () => {
     return html`
       <${AddBee} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
-`
+    `
   }
 
   useEffect(async () => {
@@ -100,7 +105,7 @@ function App (props) {
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
     ${view === 'add-bee' && renderAddBee()}
-`
+  `
 }
 
 render(html`<${App}/>`, document.body)

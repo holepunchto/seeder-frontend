@@ -6,6 +6,7 @@ import SeedBee from 'seedbee'
 function AddBee (props) {
   const [name, setName] = useState(null)
   const [entries, setEntries] = useState([])
+  const [path, setPath] = useState(null)
 
   const addEntries = async (store, name, entries) => {
     const core = store.get({ name })
@@ -46,13 +47,14 @@ function AddBee (props) {
   const onDrop = async (event) => {
     const file = event.dataTransfer.files[0]
     setEntries(parseSeederFile(await readFile(file.path)))
+    setPath(file.path)
   }
 
   return html`
    <div id="add-bee">
      <input id="bee-name" type="text" spellcheck="false" placeholder="Name" onChange=${(e) => setName(e.target.value)}/>
      <div id="drag-and-drop" ondragover=${onDragOver} ondrop=${onDrop}>
-       <p id="drag-and-drop-text"> Drag a seeder file here </p>
+       <p id="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
      <p id="add-bee-button" class="disabled-button" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db, props.store)}>Add Seeder</p>
    </div>
