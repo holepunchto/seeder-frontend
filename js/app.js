@@ -11,6 +11,8 @@ import Corestore from 'corestore'
 import Hyperbee from 'hyperbee'
 import Hyperswarm from 'hyperswarm'
 import SeedBee from 'seedbee'
+import Id from 'hypercore-id-encoding'
+
 
 function App (props) {
   const [store, setStore] = useState(null)
@@ -32,6 +34,14 @@ function App (props) {
 
   const getBeeByName = async (store, name) => {
     const core = store.get({ name })
+    const bee = new SeedBee(core)
+    await core.ready()
+    await bee.ready()
+    return bee
+  }
+
+  const getBeeByKey = async (store, key) => {
+    const core = store.get(key)
     const bee = new SeedBee(core)
     await core.ready()
     await bee.ready()
@@ -71,9 +81,10 @@ function App (props) {
     let activeBee = null
     for await (const beeInfo of beesDB.createReadStream()) {
       if (!activeBee) {
-        activeBee = await getBeeByName(store, beeInfo.key)
-        for await (const entry of activeBee.entries()) {
-          setEntries(e => [...e, entry])
+        if (!beeInfo.value.readOnly) {
+          activeBee = await getBeeByName(store, beeInfo.key)
+        } else {
+          activeBee = await getBeeByKey(store, Id.decode(beeInfo.value.key))
         }
         setBee(activeBee)
         setActiveBeeName(beeInfo.key)
@@ -81,9 +92,15 @@ function App (props) {
       swarm.join(Buffer.from(beeInfo.value.discoveryKey, 'hex'))
       setBees(e => [...e, beeInfo])
     }
+
     swarm.join(beesDB.core.discoveryKey)
     swarm.on('connection', (conn) => store.replicate(conn))
     swarm.flush()
+
+    for await (const entry of activeBee.entries()) {
+      setEntries(e => [...e, entry])
+    }
+
     setStore(store)
     setDB(beesDB)
     setSwarm(swarm)
