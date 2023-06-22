@@ -109,7 +109,7 @@ function App (props) {
   useEffect(async () => {
     const activeBee = bees.find(e => e.key === activeBeeName)
     if (activeBee && store) {
-      const selectedBee = await getBeeByName(store, activeBee.key)
+      const selectedBee = !activeBee.value.readOnly ? await getBeeByName(store, activeBee.key) : await getBeeByKey(store, Id.decode(activeBee.value.key))
       const updatedEntries = []
       for await (const entry of selectedBee.entries()) {
         updatedEntries.push(entry)
