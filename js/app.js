@@ -13,7 +13,6 @@ import Hyperswarm from 'hyperswarm'
 import SeedBee from 'seedbee'
 import Id from 'hypercore-id-encoding'
 
-
 function App (props) {
   const [store, setStore] = useState(null)
   const [entries, setEntries] = useState([])
@@ -23,6 +22,7 @@ function App (props) {
   const [db, setDB] = useState(null)
   const [activeBeeName, setActiveBeeName] = useState(null)
   const [swarm, setSwarm] = useState(null)
+  const [updateInterval, setUpdateInterval] = useState(null)
 
   const getBeesDB = async (store) => {
     const core = store.get({ name: '__top__' })
@@ -46,6 +46,16 @@ function App (props) {
     await core.ready()
     await bee.ready()
     return bee
+  }
+
+  const setReadOnlyInterval = (bee) => {
+    setUpdateInterval(setInterval(async () => {
+      const entries = []
+      for await (const entry of bee.entries()) {
+        entries.push(entry)
+      }
+      setEntries(entries)
+    }, 1000))
   }
 
   const renderMain = () => {
@@ -117,6 +127,13 @@ function App (props) {
       setActiveBeeName(activeBee.key)
       setBee(selectedBee)
       setEntries(updatedEntries)
+
+      if (updateInterval) {
+        clearInterval(updateInterval)
+      }
+      if (activeBee.value.readOnly) { // No need for interval if bee is local
+        setReadOnlyInterval(selectedBee)
+      }
     }
   }, [activeBeeName])
 

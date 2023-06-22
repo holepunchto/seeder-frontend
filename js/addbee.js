@@ -18,7 +18,7 @@ function AddBee (props) {
   }
 
   const addBee = async (name, bees, setBees, db, store) => {
-    const bee = { key: name, value: { readOnly: false }}
+    const bee = { key: name, value: { readOnly: false } }
     setBees(e => [...e, bee])
     const { key, discoveryKey } = await addEntries(store, name, entries)
     db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readOnly: false })

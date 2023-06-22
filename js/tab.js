@@ -5,7 +5,7 @@ function Tab (props) {
     return bees.map((e, i) => {
       const setActiveBeeName = () => props.setActiveBeeName(e.key)
       return html`
-            <button name="${e.key}" onclick=${setActiveBeeName} class=${e.key === activeBeeName ? 'bee-button active' : 'bee-button'}>${ !e.value.readOnly ? e.key : e.key + ' (read only)'}</button>
+            <button name="${e.key}" onclick=${setActiveBeeName} class=${e.key === activeBeeName ? 'bee-button active' : 'bee-button'}>${!e.value.readOnly ? e.key : e.key + ' (read only)'}</button>
         `
     })
   }
