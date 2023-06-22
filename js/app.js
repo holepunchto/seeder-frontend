@@ -20,10 +20,11 @@ function App (props) {
   const [view, setView] = useState('main')
   const [db, setDB] = useState(null)
   const [activeBeeName, setActiveBeeName] = useState(null)
+  const [swarm, setSwarm] = useState(null)
 
   const getBeesDB = async (store) => {
     const core = store.get({ name: '__top__' })
-    const bees = new Hyperbee(core, { keyEncoding: 'utf-8' })
+    const bees = new Hyperbee(core, { keyEncoding: 'utf-8', valueEncoding: 'json' })
     await core.ready()
     await bees.ready()
     return bees
@@ -77,12 +78,15 @@ function App (props) {
         setBee(activeBee)
         setActiveBeeName(beeInfo.key)
       }
+      swarm.join(Buffer.from(beeInfo.value.discoveryKey, 'hex'))
       setBees(e => [...e, beeInfo])
     }
-    setStore(store)
-    setDB(beesDB)
+    swarm.join(beesDB.core.discoveryKey)
     swarm.on('connection', (conn) => store.replicate(conn))
     swarm.flush()
+    setStore(store)
+    setDB(beesDB)
+    setSwarm(swarm)
   }, [])
 
   useEffect(async () => {

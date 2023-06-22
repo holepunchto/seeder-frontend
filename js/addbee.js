@@ -14,13 +14,14 @@ function AddBee (props) {
     await core.ready()
     await bee.ready()
     await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type, seeders: e.seeders })))
+    return { key: core.key, discoveryKey: core.discoveryKey }
   }
 
   const addBee = async (name, bees, setBees, db, store) => {
     const bee = { key: name }
     setBees(e => [...e, bee])
-    db.put(name)
-    await addEntries(store, name, entries)
+    const { key, discoveryKey } = await addEntries(store, name, entries)
+    db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex') })
     props.setActiveBeeName(name)
     props.setView('main')
   }
