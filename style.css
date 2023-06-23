@@ -135,7 +135,7 @@ h1 {
     width: 100%;
 }
 
-#public-key, #description, #bee-name {
+#public-key, #description, #bee-name, .remote-key {
     display: block;
     padding: 12px;
     font-size: 100%;
@@ -247,4 +247,16 @@ option {
 .checkbox {
   transform: scale(1.25);
   margin-left: 1%;
+}
+
+.seeders-checkbox {
+  color: var(--secondary-fg-color);
+}
+
+.readonly {
+  margin-top: 4vh;
+}
+
+label {
+  color: var(--secondary-fg-color);
 }

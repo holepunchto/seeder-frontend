@@ -2,6 +2,7 @@ import { readFile } from 'fs/promises'
 import { html } from 'htm/preact'
 import { useState } from 'preact/hooks'
 import SeedBee from 'seedbee'
+import Id from 'hypercore-id-encoding'
 
 function AddBee (props) {
   const [name, setName] = useState(null)
@@ -19,11 +20,23 @@ function AddBee (props) {
     return { key: core.key, discoveryKey: core.discoveryKey }
   }
 
-  const addBee = async (name, bees, setBees, db, store) => {
+  const addBee = async (name) => {
     const bee = { key: name, value: { readonly: false } }
-    setBees(e => [...e, bee])
-    const { key, discoveryKey } = await addEntries(store, name, entries)
-    db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readonly: false })
+    props.setBees(e => [...e, bee])
+    const { key, discoveryKey } = await addEntries(props.store, name, entries)
+    props.db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readonly: false })
+    props.setActiveBeeName(name)
+    props.setView('main')
+  }
+
+  const addRemoteBee = async (key) => {
+    const core = props.store.get(Id.decode(key))
+    await core.ready()
+    props.swarm.join(core.discoveryKey)
+
+    const bee = { key: name, value: { key: core.key.toString('hex'), discoveryKey: core.discoveryKey.toString('hex'), readonly: true } }
+    props.db.put(name, { key, discoveryKey: core.discoveryKey.toString('hex'), readonly: true })
+    props.setBees(e => [...e, bee])
     props.setActiveBeeName(name)
     props.setView('main')
   }
@@ -57,10 +70,14 @@ function AddBee (props) {
   return html`
    <div id="add-bee">
      <input id="bee-name" type="text" spellcheck="false" placeholder="Name" onChange=${(e) => setName(e.target.value)}/>
-     <div id="drag-and-drop" ondragover=${onDragOver} ondrop=${onDrop}>
+     <div id="drag-and-drop" class="${readonly ? 'disabled' : ''}" ondragover=${onDragOver} ondrop=${onDrop}>
        <p id="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
-     <p id="add-bee-button" class="${name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => await addBee(name, props.bees, props.setBees, props.db, props.store)}>Add Seeder</p>
+     <div class="readonly">
+       <label>Read only</label><input type="checkbox" class="checkbox" onchange=${(e) => setReadonly(e.target.checked)}/>
+       <input class="${readonly ? 'remote-key' : 'disabled'}" type="text" spellcheck="false" placeholder="Public key" onchange=${(e) => setKey(e.target.value)}/>
+     </div>
+     <p id="add-bee-button" class="${name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
    </div>
 `
 }

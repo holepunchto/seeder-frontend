@@ -22,7 +22,7 @@ function AddEntry (props) {
        <option value="bee">bee</option>
        <option value="drive">drive</option>
      </select>
-     <label>Seeders<input type="checkbox" class="checkbox" onchange=${(e) => setSeeders(e.target.value)}/></label>
+     <label class="seeders-checkbox">Seeders<input type="checkbox" class="checkbox" onchange=${(e) => setSeeders(e.target.checked)}/></label>
      <p id="add-button" class="${key ? 'enabled-button' : 'disabled-button'}" onclick=${createEntry}>Add Entry</p>
    </div>
 `

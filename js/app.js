@@ -80,7 +80,7 @@ function App (props) {
 
   const renderAddBee = () => {
     return html`
-      <${AddBee} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
+      <${AddBee} swarm=${swarm} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
     `
   }
 
@@ -131,7 +131,7 @@ function App (props) {
       setActiveBeeName(activeBee.key)
       setBee(selectedBee)
       setEntries(updatedEntries)
-      setReadonly(selectedBee.readonly)
+      setReadonly(activeBee.value.readonly)
 
       if (updateInterval) {
         clearInterval(updateInterval)
