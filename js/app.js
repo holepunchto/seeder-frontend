@@ -23,6 +23,7 @@ function App (props) {
   const [activeBeeName, setActiveBeeName] = useState(null)
   const [swarm, setSwarm] = useState(null)
   const [updateInterval, setUpdateInterval] = useState(null)
+  const [readonly, setReadonly] = useState(true)
 
   const getBeesDB = async (store) => {
     const core = store.get({ name: '__top__' })
@@ -91,7 +92,7 @@ function App (props) {
     let activeBee = null
     for await (const beeInfo of beesDB.createReadStream()) {
       if (!activeBee) {
-        if (!beeInfo.value.readOnly) {
+        if (!beeInfo.value.readonly) {
           activeBee = await getBeeByName(store, beeInfo.key)
         } else {
           activeBee = await getBeeByKey(store, Id.decode(beeInfo.value.key))
@@ -108,6 +109,7 @@ function App (props) {
     swarm.flush()
 
     if (activeBee) {
+      setReadonly(!activeBee.core.writable)
       for await (const entry of activeBee.entries()) {
         setEntries(e => [...e, entry])
       }
@@ -121,7 +123,7 @@ function App (props) {
   useEffect(async () => {
     const activeBee = bees.find(e => e.key === activeBeeName)
     if (activeBee && store) {
-      const selectedBee = !activeBee.value.readOnly ? await getBeeByName(store, activeBee.key) : await getBeeByKey(store, Id.decode(activeBee.value.key))
+      const selectedBee = !activeBee.value.readonly ? await getBeeByName(store, activeBee.key) : await getBeeByKey(store, Id.decode(activeBee.value.key))
       const updatedEntries = []
       for await (const entry of selectedBee.entries()) {
         updatedEntries.push(entry)
@@ -129,11 +131,12 @@ function App (props) {
       setActiveBeeName(activeBee.key)
       setBee(selectedBee)
       setEntries(updatedEntries)
+      setReadonly(selectedBee.readonly)
 
       if (updateInterval) {
         clearInterval(updateInterval)
       }
-      if (activeBee.value.readOnly) { // No need for interval if bee is local
+      if (activeBee.value.readonly) { // No need for interval if bee is local
         setReadOnlyInterval(selectedBee)
       }
     }
@@ -141,7 +144,7 @@ function App (props) {
 
   return html`
     <h1>🍐Seeder</h1>
-    <${Tab} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
+    <${Tab} readonly=${readonly} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
     ${view === 'add-bee' && renderAddBee()}

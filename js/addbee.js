@@ -7,6 +7,8 @@ function AddBee (props) {
   const [name, setName] = useState(null)
   const [entries, setEntries] = useState([])
   const [path, setPath] = useState(null)
+  const [readonly, setReadonly] = useState(false)
+  const [key, setKey] = useState(null)
 
   const addEntries = async (store, name, entries) => {
     const core = store.get({ name })
@@ -18,10 +20,10 @@ function AddBee (props) {
   }
 
   const addBee = async (name, bees, setBees, db, store) => {
-    const bee = { key: name, value: { readOnly: false } }
+    const bee = { key: name, value: { readonly: false } }
     setBees(e => [...e, bee])
     const { key, discoveryKey } = await addEntries(store, name, entries)
-    db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readOnly: false })
+    db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readonly: false })
     props.setActiveBeeName(name)
     props.setView('main')
   }

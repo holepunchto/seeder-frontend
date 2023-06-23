@@ -88,6 +88,12 @@ body {
     color: var(--main-fg-color);
 }
 
+.tab button.unactive {
+    color: var(--tertiary-fg-color);
+    background-color: var(--main-bg-color);
+    cursor: default;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
