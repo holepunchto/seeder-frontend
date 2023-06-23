@@ -107,8 +107,10 @@ function App (props) {
     swarm.on('connection', (conn) => store.replicate(conn))
     swarm.flush()
 
-    for await (const entry of activeBee.entries()) {
-      setEntries(e => [...e, entry])
+    if (activeBee) {
+      for await (const entry of activeBee.entries()) {
+        setEntries(e => [...e, entry])
+      }
     }
 
     setStore(store)
