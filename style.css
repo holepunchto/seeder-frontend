@@ -224,6 +224,11 @@ option {
    cursor: pointer;
 }
 
+.remove-button-disabled {
+   color: var(--tertiary-fg-color);
+   cursor: default;
+}
+
 #view-table {
     height: 53vh;
     overflow-y: auto;

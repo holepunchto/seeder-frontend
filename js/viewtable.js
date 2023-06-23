@@ -2,8 +2,10 @@ import { html } from 'htm/preact'
 
 function ViewTable (props) {
   const removeEntry = (key) => {
-    props.setEntries(props.entries.filter(e => e.key.toString('hex') !== key.toString('hex')))
-    props.bee.del(key)
+    if (!props.readonly) {
+      props.setEntries(props.entries.filter(e => e.key.toString('hex') !== key.toString('hex')))
+      props.bee.del(key)
+    }
   }
 
   const formatEntries = () => {
@@ -13,7 +15,7 @@ function ViewTable (props) {
                 <td>${e.key.toString('hex')}</td>
                 <td>${e.value.seeders ? e.value.type + '/seeder' : e.value.type}</td>
                 <td>${e.value.description}</td>
-                <td class="remove-button" onclick=${() => removeEntry(e.key)}>Remove</td>
+                <td class="${!props.readonly ? 'remove-button' : 'remove-button-disabled'}" onclick=${() => removeEntry(e.key)}>Remove</td>
               </tr>
         `
     })

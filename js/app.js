@@ -62,7 +62,7 @@ function App (props) {
   const renderMain = () => {
     if (bee) {
       return html`
-        <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee}/>
+        <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee} readonly=${readonly}/>
         <${BeeInformation} bee=${bee}/>
       `
     } else {
