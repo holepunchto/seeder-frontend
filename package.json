@@ -1,5 +1,5 @@
 {
-  "name": "seeder-frontend",
+  "name": "pear-seeder",
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
@@ -14,7 +14,7 @@
     "gui": {
       "height": 700,
       "width": 1200,
-      "resizable": false
+      "resizable": true
     },
     "entrypoints": []
   },
