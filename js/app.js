@@ -113,6 +113,9 @@ function App (props) {
       for await (const entry of activeBee.entries()) {
         setEntries(e => [...e, entry])
       }
+      if (!activeBee.core.writable) {
+        setReadOnlyInterval(activeBee)
+      }
     }
 
     setStore(store)
