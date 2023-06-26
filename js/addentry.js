@@ -12,14 +12,14 @@ function AddEntry (props) {
   const createEntry = () => {
     if (!error && key) {
       props.bee.put(key, { description, type, seeders })
-      props.setEntries(e => [...e, { key, value: { description, type, seeders } }])
+      props.setEntries(e => [...e, { key: Id.decode(key), value: { description, type, seeders } }])
       props.setView('main')
     }
   }
 
   const onKeyChange = (key) => {
     try {
-      Id.encode(Buffer.from(key, 'hex'))
+      Id.decode(key)
       setError(false)
       setKey(key)
     } catch (e) {

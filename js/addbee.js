@@ -38,7 +38,7 @@ function AddBee (props) {
     props.swarm.join(core.discoveryKey)
 
     const bee = { key: name, value: { key: core.key.toString('hex'), discoveryKey: core.discoveryKey.toString('hex'), readonly: true } }
-    props.db.put(name, { key, discoveryKey: core.discoveryKey.toString('hex'), readonly: true })
+    props.db.put(name, { key: Id.decode(key).toString('hex'), discoveryKey: core.discoveryKey.toString('hex'), readonly: true })
     props.setBees(e => [...e, bee])
     props.setActiveBeeName(name)
     props.setView('main')
@@ -72,7 +72,7 @@ function AddBee (props) {
 
   const onKeyChange = (key) => {
     try {
-      Id.encode(Buffer.from(key, 'hex'))
+      Id.decode(key)
       setError(false)
       setKey(key)
     } catch (e) {
