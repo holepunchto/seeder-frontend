@@ -10,6 +10,7 @@ function AddBee (props) {
   const [path, setPath] = useState(null)
   const [readonly, setReadonly] = useState(false)
   const [key, setKey] = useState(null)
+  const [error, setError] = useState(false)
 
   const addEntries = async (store, name, entries) => {
     const core = store.get({ name })
@@ -21,6 +22,7 @@ function AddBee (props) {
   }
 
   const addBee = async (name) => {
+    if (!name) return
     const bee = { key: name, value: { readonly: false } }
     props.setBees(e => [...e, bee])
     const { key, discoveryKey } = await addEntries(props.store, name, entries)
@@ -30,6 +32,7 @@ function AddBee (props) {
   }
 
   const addRemoteBee = async (key) => {
+    if (error || !name || !key) return
     const core = props.store.get(Id.decode(key))
     await core.ready()
     props.swarm.join(core.discoveryKey)
@@ -67,17 +70,28 @@ function AddBee (props) {
     setPath(file.path)
   }
 
+  const onKeyChange = (key) => {
+    try {
+      Id.encode(Buffer.from(key, 'hex'))
+      setError(false)
+      setKey(key)
+    } catch (e) {
+      setError(true)
+    }
+  }
+
   return html`
    <div id="add-bee">
-     <input id="bee-name" type="text" spellcheck="false" placeholder="Name" onChange=${(e) => setName(e.target.value)}/>
+     <input id="bee-name" type="text" spellcheck="false" placeholder="Name" oninput=${(e) => setName(e.target.value)}/>
      <div id="drag-and-drop" class="${readonly ? 'disabled' : ''}" ondragover=${onDragOver} ondrop=${onDrop}>
        <p id="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
      <div class="readonly">
        <label>Read only</label><input type="checkbox" class="checkbox" onchange=${(e) => setReadonly(e.target.checked)}/>
-       <input class="${readonly ? 'remote-key' : 'disabled'}" type="text" spellcheck="false" placeholder="Public key" onchange=${(e) => setKey(e.target.value)}/>
+       <p class="${error && readonly ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
+       <input class="${readonly ? 'remote-key' : 'disabled'}" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
      </div>
-     <p id="add-bee-button" class="${name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
+     <p id="add-bee-button" class="${((!error && key) || !readonly) && name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
    </div>
 `
 }

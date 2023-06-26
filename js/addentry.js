@@ -23,14 +23,13 @@ function AddEntry (props) {
       setError(false)
       setKey(key)
     } catch (e) {
-      console.log(e)
       setError(true)
     }
   }
 
   return html`
    <div id="add-form">
-      <p class="${error ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
+     <p class="${error ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
      <input id="public-key" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
      <input id="description" type="text" spellcheck="false" placeholder="Description" onchange=${(e) => setDescription(e.target.value)}/>
      <select id="select-type" onchange=${(e) => setType(e.target.value)}>
