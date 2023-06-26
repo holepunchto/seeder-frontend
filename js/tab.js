@@ -26,11 +26,11 @@ function Tab (props) {
 
   return html`
     <div class="tab">
-      <button id="tab-view" class="${props.view === 'main' ? 'active' : ''}" onclick=${() => props.setView('main')}>View</button>
-      <button id="tab-add" class="${addEntryClass()}" onclick=${addEntryOnClick}>Add Entry</button>
-      <div id="seeders">
+      <button class="tab-view" class="${props.view === 'main' ? 'active' : ''}" onclick=${() => props.setView('main')}>View</button>
+      <button class="tab-add" class="${addEntryClass()}" onclick=${addEntryOnClick}>Add Entry</button>
+      <div class="seeders">
         ${renderBees(props.bees, props.activeBeeName)}
-        <button id="add-bee-toogle" class="${props.view === 'add-bee' ? 'active' : ''}"  onclick=${() => props.setView('add-bee')}>New...</button>
+        <button class="add-bee-toogle" class="${props.view === 'add-bee' ? 'active' : ''}"  onclick=${() => props.setView('add-bee')}>New...</button>
       </div>
     </div>
 `

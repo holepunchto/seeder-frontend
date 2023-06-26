@@ -81,17 +81,17 @@ function AddBee (props) {
   }
 
   return html`
-   <div id="add-bee">
-     <input id="bee-name" type="text" spellcheck="false" placeholder="Name" oninput=${(e) => setName(e.target.value)}/>
-     <div id="drag-and-drop" class="${readonly ? 'disabled' : ''}" ondragover=${onDragOver} ondrop=${onDrop}>
-       <p id="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
+   <div class="add-bee">
+     <input class="bee-name" type="text" spellcheck="false" placeholder="Name" oninput=${(e) => setName(e.target.value)}/>
+     <div class="${readonly ? 'disabled' : 'drag-and-drop'}" ondragover=${onDragOver} ondrop=${onDrop}>
+       <p class="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
      <div class="readonly">
        <label>Read only</label><input type="checkbox" class="checkbox" onchange=${(e) => setReadonly(e.target.checked)}/>
        <p class="${error && readonly ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
        <input class="${readonly ? 'remote-key' : 'disabled'}" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
      </div>
-     <p id="add-bee-button" class="${((!error && key) || !readonly) && name ? 'enabled-button' : 'disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
+     <p class="${((!error && key) || !readonly) && name ? 'add-bee-button enabled-button' : 'add-bee-button disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
    </div>
 `
 }

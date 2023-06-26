@@ -28,17 +28,17 @@ function AddEntry (props) {
   }
 
   return html`
-   <div id="add-form">
+   <div class="add-form">
      <p class="${error ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
-     <input id="public-key" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
-     <input id="description" type="text" spellcheck="false" placeholder="Description" onchange=${(e) => setDescription(e.target.value)}/>
-     <select id="select-type" onchange=${(e) => setType(e.target.value)}>
+     <input class="public-key" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
+     <input class="description" type="text" spellcheck="false" placeholder="Description" onchange=${(e) => setDescription(e.target.value)}/>
+     <select class="select-type" onchange=${(e) => setType(e.target.value)}>
        <option value="core">core</option>
        <option value="bee">bee</option>
        <option value="drive">drive</option>
      </select>
      <label class="seeders-checkbox">Seeders<input type="checkbox" class="checkbox" onchange=${(e) => setSeeders(e.target.checked)}/></label>
-     <p id="add-button" class="${!error && key ? 'enabled-button' : 'disabled-button'}" onclick=${createEntry}>Add Entry</p>
+     <p class="${!error && key ? 'add-button enabled-button' : 'add-button disabled-button'}" onclick=${createEntry}>Add Entry</p>
    </div>
 `
 }

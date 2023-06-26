@@ -29,7 +29,7 @@ body {
     overflow: hidden;
 }
 
-#placeholder, #drag-and-drop, #bee-placeholder {
+.placeholder, .drag-and-drop, .bee-placeholder {
     background-color: var(--main-bg-color);
     text-align: center;
     margin-top: 30vh;
@@ -40,23 +40,23 @@ body {
     box-shadow: 2px 2px var(--tertiary-fg-color);
 }
 
-#drag-and-drop {
+.drag-and-drop {
     margin-top: 2vh;
     padding: 10vh;
     font-weight: bold;
 }
 
-#drag-and-drop p {
+.drag-and-drop p {
     color: var(--secondary-fg-color);
 }
 
-#bee-placeholder {
+.bee-placeholder {
     margin-bottom: 20px;
     border: 0px;
     box-shadow: 0px 0px;
 }
 
-#bee-placeholder h3 {
+.bee-placeholder h3 {
     color: var(--secondary-fg-color);
 }
 
@@ -115,7 +115,6 @@ tr:hover {
     background-color: var(--tertiary-fg-color);
 }
 
-/* CSS for the page */
 body {
     background-color: var(--main-bg-color);
     margin: 0;
@@ -127,7 +126,7 @@ h1 {
     margin-bottom: 30px;
 }
 
-#search {
+.search {
     border-radius: 10px;
     margin-right: 4vw;
     display: flex;
@@ -135,7 +134,7 @@ h1 {
     width: 100%;
 }
 
-#public-key, #description, #bee-name, .remote-key {
+.public-key, .description, .bee-name, .remote-key {
     display: block;
     padding: 12px;
     font-size: 100%;
@@ -149,11 +148,11 @@ h1 {
     color: var(--main-fg-color)
 }
 
-#bee-name {
+.bee-name {
     width: 27vw;
 }
 
-#select-type {
+.select-type {
     display: block;
     width: 10vw;
     padding: 10px;
@@ -173,7 +172,7 @@ option {
     background-color: var(--tertiary-fg-color);
 }
 
-#add-button, #add-bee-button {
+.add-button, .add-bee-button {
     padding: 12px;
     border-radius: 5px;
     margin-top: 3%;
@@ -188,16 +187,16 @@ option {
     display: none;
 }
 
-#add-form {
+.add-form {
     padding: 0px;
 }
 
-#seeders {
+.seeders {
     display: inline;
     float: right;
 }
 
-#view-public-key {
+.view-public-key {
     border: 1px solid var(--tertiary-fg-color);
     box-shadow: 2px 2px var(--tertiary-fg-color);
     border-radius: 10px;
@@ -205,7 +204,7 @@ option {
     padding-left: 20px;
 }
 
-#view-public-key p {
+.view-public-key p {
     color: var(--secondary-fg-color);
 }
 
@@ -230,7 +229,7 @@ option {
    cursor: default;
 }
 
-#view-table {
+.view-table {
     height: 53vh;
     overflow-y: auto;
     margin-bottom: 20px;

@@ -22,11 +22,11 @@ function ViewTable (props) {
   }
 
   return html`
-   <div id="view-table">
-     <div id="bee-placeholder" class="${props.entries.length ? 'disabled' : ''}">
+   <div class="view-table">
+     <div class="bee-placeholder" class="${props.entries.length ? 'disabled' : ''}">
        <h3> This seeder does not have any entry yet. Use the "Add" tab to add a new entry </h3>
      </div>
-     <table id="bee-entries"  class="${!props.entries.length ? 'disabled' : ''}">
+     <table class="bee-entries"  class="${!props.entries.length ? 'disabled' : ''}">
        <thead>
          <tr>
            <th>Key</th>
@@ -35,7 +35,7 @@ function ViewTable (props) {
            <th>Actions</th>
          </tr>
        </thead>
-       <tbody id="view-table-body">
+       <tbody class="view-table-body">
             ${formatEntries()}
        </tbody>
      </table>
