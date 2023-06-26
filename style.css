@@ -212,6 +212,7 @@ option {
 .disabled-button {
     background-color: var(--tertiary-fg-color);
     color: var(--main-bg-color);
+    cursor: default;
 }
 
 .enabled-button {
@@ -264,4 +265,10 @@ option {
 
 label {
   color: var(--secondary-fg-color);
+}
+
+.key-error {
+  color: red;
+  margin-top: 6vh;
+  margin-left: 1vh;
 }
