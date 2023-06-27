@@ -19,9 +19,9 @@ function AddEntry (props) {
 
   const onKeyChange = (key) => {
     try {
+      setKey(key)
       Id.decode(key)
       setError(false)
-      setKey(key)
     } catch (e) {
       setError(true)
     }
@@ -29,7 +29,7 @@ function AddEntry (props) {
 
   return html`
    <div class="add-form">
-     <p class="${error ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
+     <p class="${error && key && key.length ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
      <input class="public-key" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
      <input class="description" type="text" spellcheck="false" placeholder="Description" onchange=${(e) => setDescription(e.target.value)}/>
      <select class="select-type" onchange=${(e) => setType(e.target.value)}>
