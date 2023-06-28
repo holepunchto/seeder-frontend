@@ -21,6 +21,10 @@
     color: var(--main-fg-color);
 }
 
+.monospace {
+    font-family: 'Maven Pro', monospace;
+}
+
 *:focus {
     outline: 1px solid var(--secondary-bg-color);
 }
@@ -208,6 +212,10 @@ option {
     color: var(--secondary-fg-color);
 }
 
+.view-public-key span {
+    color: var(--secondary-fg-color);
+}
+
 .disabled-button {
     background-color: var(--tertiary-fg-color);
     color: var(--main-bg-color);
@@ -271,4 +279,10 @@ label {
   color: red;
   margin-top: 6vh;
   margin-left: 1vh;
+}
+
+@media only screen and (min-height: 800px) {
+    .view-table {
+        height: 65vh;
+    }
 }

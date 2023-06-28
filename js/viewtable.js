@@ -13,7 +13,7 @@ function ViewTable (props) {
     return props.entries.map(e => {
       return html`
               <tr>
-                <td>${Id.encode(e.key)}</td>
+                <td class="monospace">${Id.encode(e.key)}</td>
                 <td>${e.value.seeders ? e.value.type + '/seeder' : e.value.type}</td>
                 <td>${e.value.description}</td>
                 <td class="${!props.readonly ? 'remove-button' : 'remove-button-disabled'}" onclick=${() => removeEntry(e.key)}>Remove</td>
