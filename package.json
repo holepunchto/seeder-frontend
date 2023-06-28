@@ -1,7 +1,7 @@
 {
   "name": "seeder-frontend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple-seeder frontend pear app.",
   "main": "index.html",
   "scripts": {
     "fix": "standard --fix",
@@ -36,5 +36,13 @@
     "random-access-memory": "^6.2.0",
     "ready-resource": "^1.0.0",
     "seedbee": "^1.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holepunchto/seeder-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/holepunchto/seeder-frontend/issues"
+  },
+  "homepage": "https://github.com/holepunchto/seeder-frontend#readme"
 }
