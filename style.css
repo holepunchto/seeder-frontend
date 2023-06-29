@@ -29,10 +29,6 @@
     outline: 1px solid var(--secondary-bg-color);
 }
 
-body {
-    overflow: hidden;
-}
-
 .placeholder, .drag-and-drop, .bee-placeholder {
     background-color: var(--main-bg-color);
     text-align: center;
@@ -124,6 +120,8 @@ body {
     margin: 0;
     padding: 20px;
     font-family: Arial, sans-serif;
+    overflow: hidden;
+    padding-top: 10vh;
 }
 
 h1 {

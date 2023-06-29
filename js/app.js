@@ -146,7 +146,6 @@ function App (props) {
   }, [activeBeeName])
 
   return html`
-    <h1>🍐Seeder</h1>
     <${Tab} readonly=${readonly} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
