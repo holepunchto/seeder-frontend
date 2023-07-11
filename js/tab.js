@@ -1,6 +1,11 @@
 import { html } from 'htm/preact'
 
 function Tab (props) {
+  const deleteBee = (event, name) => {
+    event.stopPropagation()
+    props.setToDelete(name)
+  }
+
   const renderBees = (bees, activeBeeName) => {
     return bees.map((e, i) => {
       const isActive = (e) => e.key === activeBeeName && (props.view === 'main' || props.view === 'add-entry')
@@ -9,7 +14,10 @@ function Tab (props) {
         props.setView('main')
       }
       return html`
-            <button name="${e.key}" onclick=${setActiveBeeName} class=${isActive(e) ? 'bee-button active' : 'bee-button'}>${!e.value.readonly ? e.key : e.key + ' (read only)'}</button>
+            <button name="${e.key}" onclick=${setActiveBeeName} class=${isActive(e) ? 'bee-button active' : 'bee-button'}>
+              ${!e.value.readonly ? e.key : e.key + ' (read only)'}
+              <label class="remove-button" onclick=${(event) => deleteBee(event, e.key)}>[x]</label>
+            </button>
         `
     })
   }

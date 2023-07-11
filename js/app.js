@@ -6,6 +6,7 @@ import ViewTable from './viewtable.js'
 import BeeInformation from './beeinformation.js'
 import AddEntry from './addentry.js'
 import AddBee from './addbee.js'
+import DeleteBeePopup from './delete-bee-popup.js'
 import holepunch from 'holepunch://app'
 import Corestore from 'corestore'
 import Hyperbee from 'hyperbee'
@@ -24,6 +25,7 @@ function App (props) {
   const [swarm, setSwarm] = useState(null)
   const [updateInterval, setUpdateInterval] = useState(null)
   const [readonly, setReadonly] = useState(true)
+  const [toDelete, setToDelete] = useState(null)
 
   const getBeesDB = async (store) => {
     const core = store.get({ name: '__top__' })
@@ -60,14 +62,14 @@ function App (props) {
   }
 
   const renderMain = () => {
-    if (bee) {
+    if (bee && activeBeeName) {
       return html`
         <${ViewTable} entries=${entries} setEntries=${setEntries} bee=${bee} readonly=${readonly}/>
         <${BeeInformation} bee=${bee}/>
       `
     } else {
       return html`
-        <${Placeholder} bees=${bees}/>
+        <${Placeholder} bees=${bees} activeBeeName=${activeBeeName}/>
       `
     }
   }
@@ -81,6 +83,12 @@ function App (props) {
   const renderAddBee = () => {
     return html`
       <${AddBee} swarm=${swarm} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
+    `
+  }
+
+  const renderDeletePopup = () => {
+    return html`
+      <${DeleteBeePopup} setActiveBeeName=${setActiveBeeName} toDelete=${toDelete} setToDelete=${setToDelete} setBees=${setBees} db=${db}/>
     `
   }
 
@@ -124,6 +132,12 @@ function App (props) {
   }, [])
 
   useEffect(async () => {
+    if (!activeBeeName) {
+      setBee(null)
+      setEntries([])
+      setReadonly(true)
+      if (updateInterval) clearInterval(updateInterval)
+    }
     const activeBee = bees.find(e => e.key === activeBeeName)
     if (activeBee && store) {
       const selectedBee = !activeBee.value.readonly ? await getBeeByName(store, activeBee.key) : await getBeeByKey(store, Id.decode(activeBee.value.key))
@@ -146,10 +160,11 @@ function App (props) {
   }, [activeBeeName])
 
   return html`
-    <${Tab} readonly=${readonly} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
+    <${Tab} setToDelete=${setToDelete} readonly=${readonly} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
     ${view === 'add-bee' && renderAddBee()}
+    ${toDelete && renderDeletePopup()}
   `
 }
 
