@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "fix": "standard --fix",
-    "stage": "rm -r -f node_modules && rm -f package-lock.json && npm i --omit=dev && pear stage pear-seeder-v2",
+    "stage": "rm -r -f node_modules && npm i --omit=dev && pear stage pear-seeder-v2",
     "release": "pear release pear-seeder-v2",
     "seed": "pear seed pear-seeder-v2",
     "test": "standard"
