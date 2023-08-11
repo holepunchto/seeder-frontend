@@ -4,6 +4,8 @@ import { useState } from 'preact/hooks'
 import SeedBee from 'seedbee'
 import Id from 'hypercore-id-encoding'
 
+const ALLOWED_PEERS = 'simple-seeder/allowed-peers'
+
 function AddBee (props) {
   const [name, setName] = useState(null)
   const [entries, setEntries] = useState([])
@@ -11,6 +13,7 @@ function AddBee (props) {
   const [readonly, setReadonly] = useState(false)
   const [key, setKey] = useState(null)
   const [error, setError] = useState(false)
+  const [allowedPeers, setAllowedPeers] = useState(null)
 
   const addEntries = async (store, name, entries) => {
     const core = store.get({ name })
@@ -18,12 +21,13 @@ function AddBee (props) {
     await core.ready()
     await bee.ready()
     await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type, seeders: e.seeders })))
+    if (allowedPeers) bee.metadata.put(ALLOWED_PEERS, allowedPeers.split(',').map(e => e.trim()))
     return { key: core.key, discoveryKey: core.discoveryKey }
   }
 
   const addBee = async (name) => {
     if (!name) return
-    const bee = { key: name, value: { readonly: false } }
+    const bee = { key: name, value: { readonly: false }, allowedPeers }
     props.setBees(e => [...e, bee])
     const { key, discoveryKey } = await addEntries(props.store, name, entries)
     props.db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readonly: false })
@@ -83,6 +87,7 @@ function AddBee (props) {
   return html`
    <div class="add-bee">
      <input class="bee-name" type="text" spellcheck="false" placeholder="Name" oninput=${(e) => setName(e.target.value)}/>
+     <textarea class="${readonly ? 'disabled' : ''}" id="peers-list" placeholder="Allowed peers (leave the field empty if you want to allow all peers)"  oninput=${(e) => setAllowedPeers(e.target.value)}></textarea>
      <div class="${readonly ? 'disabled' : 'drag-and-drop'}" ondragover=${onDragOver} ondrop=${onDrop}>
        <p class="drag-and-drop-text"> ${path ? 'File: ' + path : 'Drag a seeder file here'} </p>
      </div>
@@ -91,7 +96,7 @@ function AddBee (props) {
        <p class="${error && readonly ? 'key-error' : 'disabled'}"> Invalid Hypercore key </p>
        <input class="${readonly ? 'remote-key' : 'disabled'}" type="text" spellcheck="false" placeholder="Public key" oninput=${(e) => onKeyChange(e.target.value)}/>
      </div>
-     <p class="${((!error && key) || !readonly) && name ? 'add-bee-button enabled-button' : 'add-bee-button disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name)}>Add Seeder</p>
+     <p class="${((!error && key) || !readonly) && name ? 'add-bee-button enabled-button' : 'add-bee-button disabled-button'}" onclick=${async () => readonly ? await addRemoteBee(key) : await addBee(name, allowedPeers)}>Add Seeder</p>
    </div>
 `
 }

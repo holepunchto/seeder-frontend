@@ -42,7 +42,7 @@
 
 .drag-and-drop {
     margin-top: 2vh;
-    padding: 10vh;
+    padding: 8vh;
     font-weight: bold;
 }
 
@@ -338,4 +338,17 @@ label {
 
 .remove-button {
     margin-left: 1vw;
+}
+
+#peers-list {
+    width: 98%;
+    height: 80px;
+    resize: none;
+    background: var(--primary-bg-color);
+    border: 1px solid var(--tertiary-fg-color);
+    box-shadow: 2px 2px var(--tertiary-fg-color);
+    margin-top: 3vh;
+    font-size: 100%;
+    border-radius: 5px;
+    padding: 1%;
 }
