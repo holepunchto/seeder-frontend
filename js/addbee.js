@@ -33,6 +33,7 @@ function AddBee (props) {
     props.db.put(name, { key: key.toString('hex'), discoveryKey: discoveryKey.toString('hex'), readonly: false })
     props.setActiveBeeName(name)
     props.setView('main')
+    props.swarm.join(discoveryKey)
   }
 
   const addRemoteBee = async (key) => {
