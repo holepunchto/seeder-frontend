@@ -28,14 +28,25 @@ function Tab (props) {
     }
   }
 
+  const allowedPeersOnClick = () => {
+    if (!props.readonly) {
+      props.setView('allowed-peers')
+    }
+  }
+
   const addEntryClass = () => {
     return (props.view === 'add-entry' ? 'active' : '') + (props.readonly ? ' unactive' : '')
+  }
+
+  const allowedPeersClass = () => {
+    return (props.view === 'allowed-peers' ? 'active' : '') + (props.readonly ? ' unactive' : '')
   }
 
   return html`
     <div class="tab">
       <button class="tab-view" class="${props.view === 'main' ? 'active' : ''}" onclick=${() => props.setView('main')}>View</button>
       <button class="tab-add" class="${addEntryClass()}" onclick=${addEntryOnClick}>Add Entry</button>
+      <button class="tab-peers" class="${allowedPeersClass()}" onclick=${allowedPeersOnClick}>Allowed Peers</button>
       <div class="seeders">
         ${renderBees(props.bees, props.activeBeeName)}
         <button class="add-bee-toogle" class="${props.view === 'add-bee' ? 'active' : ''}"  onclick=${() => props.setView('add-bee')}>New...</button>

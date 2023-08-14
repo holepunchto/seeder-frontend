@@ -6,6 +6,7 @@ import ViewTable from './viewtable.js'
 import BeeInformation from './beeinformation.js'
 import AddEntry from './addentry.js'
 import AddBee from './addbee.js'
+import AllowedPeers from './allowed-peers.js'
 import DeleteBeePopup from './delete-bee-popup.js'
 import holepunch from 'holepunch://app'
 import Corestore from 'corestore'
@@ -83,6 +84,12 @@ function App (props) {
   const renderAddBee = () => {
     return html`
       <${AddBee} swarm=${swarm} bees=${bees} db=${db} setBees=${setBees} store=${store} setView=${setView} setActiveBeeName=${setActiveBeeName}/>
+    `
+  }
+
+  const renderAllowedPeers = () => {
+    return html`
+      <${AllowedPeers} bee=${bee} setView=${setView}/>
     `
   }
 
@@ -164,6 +171,7 @@ function App (props) {
     ${view === 'main' && renderMain()}
     ${view === 'add-entry' && renderAddEntry()}
     ${view === 'add-bee' && renderAddBee()}
+    ${view === 'allowed-peers' && renderAllowedPeers()}
     ${toDelete && renderDeletePopup()}
   `
 }

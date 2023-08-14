@@ -174,7 +174,7 @@ option {
     background-color: var(--tertiary-fg-color);
 }
 
-.add-button, .add-bee-button {
+.add-button, .add-bee-button, .allowed-peers-button {
     padding: 12px;
     border-radius: 5px;
     margin-top: 3%;
