@@ -5,6 +5,7 @@ import SeedBee from 'seedbee'
 import Id from 'hypercore-id-encoding'
 
 const ALLOWED_PEERS = 'simple-seeder/allowed-peers'
+const SWARM_PUBLIC_KEY = 'simple-seeder/swarm-public-key'
 
 function AddBee (props) {
   const [name, setName] = useState(null)
@@ -22,6 +23,7 @@ function AddBee (props) {
     await bee.ready()
     await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type, seeders: e.seeders })))
     if (allowedPeers) bee.metadata.put(ALLOWED_PEERS, allowedPeers.split(',').map(e => e.trim()))
+    bee.metadata.put(SWARM_PUBLIC_KEY, props.swarm.keyPair.publicKey.toString('hex'))
     return { key: core.key, discoveryKey: core.discoveryKey }
   }
 

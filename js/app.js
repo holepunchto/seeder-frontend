@@ -99,11 +99,18 @@ function App (props) {
     `
   }
 
+  const renderPublicKey = () => {
+    return html`
+      <p class="swarm-public-key">Swarm public key: ${Id.encode(swarm.keyPair.publicKey)}</p>
+    `
+  }
+
   useEffect(async () => {
     const store = new Corestore(holepunch.config.storage).namespace('pear-seeder-v2')
     await store.ready()
     const beesDB = await getBeesDB(store)
-    const swarm = new Hyperswarm()
+    const keyPair = await store.createKeyPair('seeder-frontend')
+    const swarm = new Hyperswarm({ keyPair })
     let activeBee = null
     for await (const beeInfo of beesDB.createReadStream()) {
       if (!activeBee) {
@@ -173,6 +180,7 @@ function App (props) {
     ${view === 'add-bee' && renderAddBee()}
     ${view === 'allowed-peers' && renderAllowedPeers()}
     ${toDelete && renderDeletePopup()}
+    ${view === 'main' && swarm && renderPublicKey()}
   `
 }
 

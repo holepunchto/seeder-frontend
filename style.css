@@ -210,6 +210,12 @@ option {
     color: var(--secondary-fg-color);
 }
 
+.swarm-public-key {
+    background-color: var(--main-bg-color);
+    padding: 20px;
+    color: var(--secondary-fg-color);
+}
+
 .view-public-key span {
     color: var(--secondary-fg-color);
 }
