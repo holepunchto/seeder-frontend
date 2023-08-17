@@ -175,12 +175,14 @@ function App (props) {
 
   return html`
     <${Tab} setToDelete=${setToDelete} readonly=${readonly} bees=${bees} setView=${setView} activeBeeName=${activeBeeName} setActiveBeeName=${setActiveBeeName}  view=${view}/>
-    ${view === 'main' && renderMain()}
-    ${view === 'add-entry' && renderAddEntry()}
-    ${view === 'add-bee' && renderAddBee()}
-    ${view === 'allowed-peers' && renderAllowedPeers()}
-    ${toDelete && renderDeletePopup()}
-    ${view === 'main' && swarm && renderPublicKey()}
+    <div>
+      ${view === 'main' && renderMain()}
+      ${view === 'add-entry' && renderAddEntry()}
+      ${view === 'add-bee' && renderAddBee()}
+      ${view === 'allowed-peers' && renderAllowedPeers()}
+      ${toDelete && renderDeletePopup()}
+      ${view === 'main' && swarm && renderPublicKey()}
+    </div>
   `
 }
 
