@@ -23,7 +23,7 @@ function AddBee (props) {
     await bee.ready()
     await Promise.all(entries.map(e => bee.put(e.key, { description: e.description, type: e.type, seeders: e.seeders })))
     if (allowedPeers) bee.metadata.put(ALLOWED_PEERS, allowedPeers.split(',').map(e => e.trim()))
-    bee.metadata.put(SWARM_PUBLIC_KEY, props.swarm.keyPair.publicKey.toString('hex'))
+    bee.metadata.put(SWARM_PUBLIC_KEY, props.swarm.keyPair.publicKey)
     return { key: core.key, discoveryKey: core.discoveryKey }
   }
 
