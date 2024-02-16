@@ -10,7 +10,7 @@
     "seed": "pear seed pear-seeder-v3",
     "test": "standard"
   },
-  "holepunch": {
+  "pear": {
     "gui": {
       "height": 700,
       "width": 1200,
