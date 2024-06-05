@@ -8,7 +8,6 @@ import AddEntry from './addentry.js'
 import AddBee from './addbee.js'
 import AllowedPeers from './allowed-peers.js'
 import DeleteBeePopup from './delete-bee-popup.js'
-import pear from 'pear'
 import Corestore from 'corestore'
 import Hyperbee from 'hyperbee'
 import Hyperswarm from 'hyperswarm'
@@ -106,7 +105,7 @@ function App (props) {
   }
 
   useEffect(async () => {
-    const store = new Corestore(pear.config.storage).namespace('pear-seeder-v2')
+    const store = new Corestore(Pear.config.storage).namespace('pear-seeder-v2')
     await store.ready()
     const beesDB = await getBeesDB(store)
     const keyPair = await store.createKeyPair('seeder-frontend')
