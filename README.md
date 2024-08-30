@@ -13,3 +13,7 @@ simple-seeder [seedbee-public-key]
 ```
 
 You can create your own seedbees and add new entries or you can use the read-only mode to follow the list of cores included in a seedbee.
+
+## License
+
+Apache-2.0
