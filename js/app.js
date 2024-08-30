@@ -1,3 +1,5 @@
+/* global Pear */
+
 import { html, render } from 'htm/preact'
 import { useState, useEffect } from 'preact/hooks'
 import Tab from './tab.js'
